@@ -1,13 +1,133 @@
-<DOCTYPE! html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Semana 2 - Desarrollo Web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnoxhBeats - Mi Plataforma Musical</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header { background-color: #1db954; padding: 20px; text-align: center; }
+        header h1 { color: white; margin: 0; }
+        nav { background-color: #333; padding: 10px; text-align: center; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        main { max-width: 900px; margin: 20px auto; padding: 0 20px; display: flex; gap: 20px; }
+        .contenido { flex: 1; }
+        section { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #ddd; }
+        section h2 { color: #1db954; }
+        section img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-top: 10px; }
+        aside { width: 220px; background-color: white; padding: 15px; border-radius: 6px; border: 1px solid #ddd; align-self: start; }
+        aside h3 { color: #1db954; margin-top: 0; }
+        footer { background-color: #333; color: white; text-align: center; padding: 15px; margin-top: 20px; }
+    </style>
 </head>
 <body>
 
-    <h1> Semana 2 - Desarrollo Web</h1>
-    <h2> App para crear aplicaciones web modernas</h2>
-    <h3> Hecho por Enoc Yanez</h3>
-    <h4> Hola mundo!!</h4>
+    <header>
+        <h1>EnoxhBeats - Mi Plataforma Musical</h1>
+    </header>
+
+    <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#quienes">Quiénes Somos</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+
+    <main>
+        <div class="contenido">
+
+            <section id="inicio">
+                <h2>Inicio</h2>
+                <p>Bienvenido a EnoxhBeats, una plataforma web dedicada a compartir música, playlists y recomendaciones musicales de todo tipo de géneros.</p>
+            </section>
+
+            <section id="quienes">
+                <h2>Quiénes Somos</h2>
+                <p>
+                    EnoxhBeats es un proyecto creado por Enoc Yanez, estudiante de Desarrollo de Aplicaciones Web.
+                    Este sitio nació de la pasión por la música y la tecnología. Su objetivo principal es ofrecer un espacio digital donde
+                    los usuarios puedan descubrir nueva música, revisar listas de reproducción organizadas por género y acceder a
+                    recomendaciones semanales. Creemos que la música conecta personas y culturas, por eso este proyecto busca ser un
+                    punto de encuentro para todos los amantes de la música, sin importar el género que prefieran. EnoxhBeats está en
+                    constante crecimiento y mejora, igual que la música misma.
+                </p>
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80" alt="Persona escuchando música" />
+            </section>
+
+            <section id="servicios">
+                <h2>Servicios</h2>
+                <ul>
+                    <li>Playlists personalizadas por género</li>
+                    <li>Recomendaciones semanales de canciones</li>
+                    <li>Top 10 canciones del mes</li>
+                    <li>Reseñas de álbumes</li>
+                    <li>Descubrimiento de artistas independientes</li>
+                    <li>Playlists para estudiar, entrenar o relajarse</li>
+                </ul>
+            </section>
+
+            <section id="video">
+                <h2>Video Relacionado</h2>
+                <iframe
+                    width="100%"
+                    height="315"
+                    src="https://youtu.be/rYwXfmgNSVI?si=y3CpALUBhZHwJCu1"
+                    title="Video musical"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+            </section>
+
+            <section id="contacto">
+                <h2>Contacto</h2>
+                <p>📧 Correo: <a href="ei.yanezs@uea.edu.ec">ei.yanezs@uea.edu.ec</a></p>
+                <p>📞 Teléfono: +593 99 000 0000</p>
+                <p>📍 Dirección: Tena, Ecuador</p>
+                <p>Redes sociales:
+                    <a href="https://www.instagram.com" target="_blank">Instagram</a> |
+                    <a href="https://www.facebook.com" target="_blank">Facebook</a> |
+                    <a href="https://www.tiktok.com" target="_blank">TikTok</a> |
+                    <a href="https://open.spotify.com" target="_blank">Spotify</a>
+                </p>
+            </section>
+
+            <article>
+                <h3>Canción de la semana</h3>
+                <p>Esta semana recomendamos <em>Imagination</em> de Foster the People, una joya que no es muy conocida pero tiene un beat muy pegadizo.</p>
+            </article>
+
+        </div>
+
+        <aside>
+            <h3>Información</h3>
+            <p><strong>Horarios de actualización:</strong></p>
+            <ul>
+                <li>Lunes: Top semanal</li>
+                <li>Viernes: Playlist nueva</li>
+                <li>Domingo: Reseña de álbum</li>
+            </ul>
+            <p><strong>Géneros disponibles:</strong></p>
+            <ul>
+                <li>Pop</li>
+                <li>Reggaetón Alternativo</li>
+                <li>Rock-Rock Alternativo</li>
+                <li>Electrónica</li>
+                <li>Indie</li>
+            </ul>
+        </aside>
+
+    </main>
+
+    <footer>
+        <p>Estudiante: <strong>Enoc Isaías Yanez Saltos</strong> | Asignatura: Desarrollo de Aplicaciones Web | 2026</p>
+    </footer>
+
 </body>
+</html>
