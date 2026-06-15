@@ -5,38 +5,280 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EnoxhBeats - Mi Plataforma Musical</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        header { background-color: #1db954; padding: 20px; text-align: center; }
-        header h1 { color: white; margin: 0; }
-        nav { background-color: #333; padding: 10px; text-align: center; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; }
-        nav a:hover { text-decoration: underline; }
-        main { max-width: 900px; margin: 20px auto; padding: 0 20px; display: flex; gap: 20px; }
-        .contenido { flex: 1; }
-        section { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #ddd; }
-        section h2 { color: #1db954; }
-        section img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-top: 10px; }
-        aside { width: 220px; background-color: white; padding: 15px; border-radius: 6px; border: 1px solid #ddd; align-self: start; }
-        aside h3 { color: #1db954; margin-top: 0; }
-        footer { background-color: #333; color: white; text-align: center; padding: 15px; margin-top: 20px; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #1db954;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #1db954;
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .contenido {
+            flex: 1;
+        }
+
+        section {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.3s;
+        }
+
+        section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        section h2 {
+            color: #1db954;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #1db954;
+            padding-bottom: 10px;
+        }
+
+        section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        section ul li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        section ul li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #1db954;
+        }
+
+        section img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 6px;
+        }
+
+        article {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #1db954;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        article h3 {
+            color: #1db954;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        a {
+            color: #1db954;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #159c44;
+            text-decoration: underline;
+        }
+
+        aside {
+            width: 250px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        aside h3 {
+            color: #1db954;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        aside p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        aside ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+
+        aside ul li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        aside ul li:before {
+            content: "♪";
+            position: absolute;
+            left: 0;
+            color: #1db954;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            nav a {
+                margin: 0 10px;
+                font-size: 0.9rem;
+            }
+
+            main {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            aside {
+                width: 100%;
+                position: static;
+                top: auto;
+            }
+
+            section h2 {
+                font-size: 1.4rem;
+            }
+
+            section, article {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.4rem;
+            }
+
+            nav {
+                padding: 10px;
+            }
+
+            nav a {
+                display: block;
+                margin: 8px 0;
+            }
+
+            main {
+                margin: 15px auto;
+            }
+
+            section h2 {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>EnoxhBeats - Mi Plataforma Musical</h1>
+        <h1>🎵 EnoxhBeats - Mi Plataforma Musical</h1>
     </header>
 
     <nav>
         <a href="#inicio">Inicio</a>
         <a href="#quienes">Quiénes Somos</a>
         <a href="#servicios">Servicios</a>
+        <a href="#video">Video</a>
         <a href="#contacto">Contacto</a>
     </nav>
 
@@ -45,13 +287,13 @@
 
             <section id="inicio">
                 <h2>Inicio</h2>
-                <p>Bienvenido a EnoxhBeats, una plataforma web dedicada a compartir música, playlists y recomendaciones musicales de todo tipo de géneros.</p>
+                <p>Bienvenido a <strong>EnoxhBeats</strong>, una plataforma web dedicada a compartir música, playlists y recomendaciones musicales de todo tipo de géneros. Aquí encontrarás un espacio para descubrir sonidos nuevos y compartir tu pasión por la música.</p>
             </section>
 
             <section id="quienes">
                 <h2>Quiénes Somos</h2>
                 <p>
-                    EnoxhBeats es un proyecto creado por Enoc Yanez, estudiante de Desarrollo de Aplicaciones Web.
+                    EnoxhBeats es un proyecto creado por <strong>Enoc Yanez</strong>, estudiante de Desarrollo de Aplicaciones Web.
                     Este sitio nació de la pasión por la música y la tecnología. Su objetivo principal es ofrecer un espacio digital donde
                     los usuarios puedan descubrir nueva música, revisar listas de reproducción organizadas por género y acceder a
                     recomendaciones semanales. Creemos que la música conecta personas y culturas, por eso este proyecto busca ser un
@@ -75,38 +317,38 @@
 
             <section id="video">
                 <h2>Video Relacionado</h2>
-                <iframe
-                    width="100%"
-                    height="315"
-                    src="https://youtu.be/rYwXfmgNSVI?si=y3CpALUBhZHwJCu1"
-                    title="Video musical"
-                    frameborder="0"
-                    allowfullscreen>
-                </iframe>
+                <p>Disfruta de este video musical recomendado:</p>
+                <div class="video-container">
+                    <iframe
+                        src="https://www.youtube.com/embed/rYwXfmgNSVI"
+                        title="Video musical - EnoxhBeats"
+                        allowfullscreen>
+                    </iframe>
+                </div>
             </section>
 
             <section id="contacto">
                 <h2>Contacto</h2>
-                <p>📧 Correo: <a href="ei.yanezs@uea.edu.ec">ei.yanezs@uea.edu.ec</a></p>
-                <p>📞 Teléfono: +593 99 000 0000</p>
-                <p>📍 Dirección: Tena, Ecuador</p>
-                <p>Redes sociales:
-                    <a href="https://www.instagram.com" target="_blank">Instagram</a> |
-                    <a href="https://www.facebook.com" target="_blank">Facebook</a> |
-                    <a href="https://www.tiktok.com" target="_blank">TikTok</a> |
-                    <a href="https://open.spotify.com" target="_blank">Spotify</a>
+                <p><strong>📧 Correo:</strong> <a href="mailto:ei.yanezs@uea.edu.ec">ei.yanezs@uea.edu.ec</a></p>
+                <p><strong>📞 Teléfono:</strong> <a href="tel:+593990000000">+593 99 000 0000</a></p>
+                <p><strong>📍 Dirección:</strong> Tena, Ecuador</p>
+                <p><strong>🌐 Redes sociales:</strong><br>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a> |
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a> |
+                    <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">TikTok</a> |
+                    <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>
                 </p>
             </section>
 
             <article>
-                <h3>Canción de la semana</h3>
-                <p>Esta semana recomendamos <em>Imagination</em> de Foster the People, una joya que no es muy conocida pero tiene un beat muy pegadizo.</p>
+                <h3>🎶 Canción de la semana</h3>
+                <p>Esta semana recomendamos <em><strong>Imagination</strong></em> de <strong>Foster the People</strong>, una joya que no es muy conocida pero tiene un beat muy pegadizo y letras inspiradoras.</p>
             </article>
 
         </div>
 
         <aside>
-            <h3>Información</h3>
+            <h3>ℹ️ Información</h3>
             <p><strong>Horarios de actualización:</strong></p>
             <ul>
                 <li>Lunes: Top semanal</li>
