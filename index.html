@@ -4,112 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EnoxhBeats - Mi Plataforma Musical</title>
+
+    <!-- Bootstrap CSS por CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f4f6f5;
             color: #333;
             line-height: 1.6;
         }
 
         header {
-            background-color: #1db954;
-            padding: 20px;
+            background: linear-gradient(135deg, #1db954, #121212);
+            color: white;
+            padding: 70px 20px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         header h1 {
-            color: white;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
+            font-weight: bold;
         }
 
-        nav {
-            background-color: #333;
-            padding: 15px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        header p {
+            max-width: 700px;
+            margin: 15px auto 0;
+            font-size: 1.1rem;
         }
 
-        nav a {
-            color: white;
-            margin: 0 20px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
-        nav a:hover {
-            color: #1db954;
-            text-decoration: underline;
+        .navbar-brand {
+            font-weight: bold;
+            color: #1db954 !important;
         }
 
-        main {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-            display: flex;
-            gap: 30px;
+        .nav-link:hover {
+            color: #1db954 !important;
         }
 
-        .contenido {
-            flex: 1;
-        }
-
-        section {
+        section, article, aside {
             background-color: white;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            transition: box-shadow 0.3s;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
         }
 
-        section:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        }
-
-        section h2 {
+        h2, h3 {
             color: #1db954;
-            margin-bottom: 15px;
-            font-size: 1.8rem;
+        }
+
+        .titulo-seccion {
             border-bottom: 2px solid #1db954;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
         }
 
-        section ul {
-            list-style: none;
-            padding-left: 0;
+        .btn-verde {
+            background-color: #1db954;
+            color: white;
+            border: none;
         }
 
-        section ul li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
+        .btn-verde:hover {
+            background-color: #159c44;
+            color: white;
+            transform: scale(1.03);
+            transition: 0.3s;
         }
 
-        section ul li:before {
-            content: "▶";
-            position: absolute;
-            left: 0;
+        .card {
+            border: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
             color: #1db954;
+            font-weight: bold;
         }
 
-        section img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-top: 15px;
+        .imagen-redondeada {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .video-container {
@@ -118,7 +108,7 @@
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            margin-top: 15px;
+            border-radius: 12px;
         }
 
         .video-container iframe {
@@ -128,248 +118,231 @@
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 6px;
-        }
-
-        article {
-            background-color: white;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 8px;
-            border-left: 4px solid #1db954;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
-
-        article h3 {
-            color: #1db954;
-            margin-bottom: 10px;
-            font-size: 1.4rem;
-        }
-
-        a {
-            color: #1db954;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            color: #159c44;
-            text-decoration: underline;
-        }
-
-        aside {
-            width: 250px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            height: fit-content;
-            position: sticky;
-            top: 80px;
-        }
-
-        aside h3 {
-            color: #1db954;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        aside p {
-            margin-bottom: 12px;
-            font-size: 0.95rem;
         }
 
         aside ul {
             list-style: none;
             padding-left: 0;
-            margin-bottom: 20px;
         }
 
-        aside ul li {
-            padding: 6px 0;
-            padding-left: 20px;
-            position: relative;
-            font-size: 0.95rem;
+        aside li {
+            margin-bottom: 8px;
         }
 
-        aside ul li:before {
-            content: "♪";
-            position: absolute;
-            left: 0;
+        aside li::before {
+            content: "♪ ";
             color: #1db954;
+            font-weight: bold;
         }
 
         footer {
-            background-color: #333;
+            background-color: #121212;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             margin-top: 40px;
         }
 
-        footer p {
-            margin: 0;
-        }
+        /* Media query solicitada para pantallas pequeñas */
+        @media (max-width: 576px) {
+            header {
+                padding: 45px 15px;
+            }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
             header h1 {
                 font-size: 1.8rem;
             }
 
-            nav a {
-                margin: 0 10px;
-                font-size: 0.9rem;
+            header p {
+                font-size: 0.95rem;
             }
 
-            main {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            aside {
-                width: 100%;
-                position: static;
-                top: auto;
-            }
-
-            section h2 {
-                font-size: 1.4rem;
-            }
-
-            section, article {
-                padding: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 1.4rem;
-            }
-
-            nav {
-                padding: 10px;
-            }
-
-            nav a {
-                display: block;
-                margin: 8px 0;
-            }
-
-            main {
-                margin: 15px auto;
-            }
-
-            section h2 {
-                font-size: 1.2rem;
+            section, article, aside {
+                padding: 18px !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🎵 EnoxhBeats - Mi Plataforma Musical</h1>
+    <header id="inicio">
+        <h1>🎵 EnoxhBeats</h1>
+        <p>Mi plataforma musical para descubrir playlists, canciones recomendadas y nuevos artistas.</p>
+        <a href="#servicios" class="btn btn-verde mt-3">Ver servicios</a>
     </header>
 
-    <nav>
-        <a href="#inicio">Inicio</a>
-        <a href="#quienes">Quiénes Somos</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#video">Video</a>
-        <a href="#contacto">Contacto</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#inicio">EnoxhBeats</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#quienes">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#video">Video</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    <main>
-        <div class="contenido">
+    <main class="container my-4">
+        <div class="row g-4">
+            <div class="col-lg-8">
 
-            <section id="inicio">
-                <h2>Inicio</h2>
-                <p>Bienvenido a <strong>EnoxhBeats</strong>, una plataforma web dedicada a compartir música, playlists y recomendaciones musicales de todo tipo de géneros. Aquí encontrarás un espacio para descubrir sonidos nuevos y compartir tu pasión por la música.</p>
-            </section>
+                <section class="p-3 m-3" id="bienvenida">
+                    <h2 class="titulo-seccion">Inicio</h2>
+                    <p>
+                        Bienvenido a <strong>EnoxhBeats</strong>, una plataforma web dedicada a compartir música,
+                        playlists y recomendaciones musicales de varios géneros. Aquí puedes descubrir sonidos nuevos
+                        y disfrutar contenido musical de forma sencilla.
+                    </p>
+                    <a href="#contacto" class="btn btn-verde">Contáctanos</a>
+                    <a href="#quienes" class="btn btn-outline-dark">Conocer más</a>
+                </section>
 
-            <section id="quienes">
-                <h2>Quiénes Somos</h2>
-                <p>
-                    EnoxhBeats es un proyecto creado por <strong>Enoc Yanez</strong>, estudiante de Desarrollo de Aplicaciones Web.
-                    Este sitio nació de la pasión por la música y la tecnología. Su objetivo principal es ofrecer un espacio digital donde
-                    los usuarios puedan descubrir nueva música, revisar listas de reproducción organizadas por género y acceder a
-                    recomendaciones semanales. Creemos que la música conecta personas y culturas, por eso este proyecto busca ser un
-                    punto de encuentro para todos los amantes de la música, sin importar el género que prefieran. EnoxhBeats está en
-                    constante crecimiento y mejora, igual que la música misma.
-                </p>
-                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80" alt="Persona escuchando música" />
-            </section>
+                <section class="p-3 m-3" id="quienes">
+                    <h2 class="titulo-seccion">Quiénes Somos</h2>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p>
+                                EnoxhBeats es un proyecto creado por <strong>Enoc Yanez</strong>, estudiante de Desarrollo
+                                de Aplicaciones Web. Este sitio nació de la pasión por la música y la tecnología.
+                            </p>
+                            <p>
+                                El objetivo es ofrecer un espacio digital donde los usuarios puedan revisar listas de
+                                reproducción, recomendaciones semanales y descubrir artistas nuevos.
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80" class="img-fluid imagen-redondeada" alt="Persona escuchando música">
+                        </div>
+                    </div>
+                </section>
 
-            <section id="servicios">
-                <h2>Servicios</h2>
+                <section class="p-3 m-3" id="servicios">
+                    <h2 class="titulo-seccion">Servicios</h2>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">🎧 Playlists</h5>
+                                    <p class="card-text">Listas musicales organizadas por género, estado de ánimo o actividad.</p>
+                                    <a href="#contacto" class="btn btn-verde btn-sm">Solicitar</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">⭐ Recomendaciones</h5>
+                                    <p class="card-text">Canciones y artistas recomendados cada semana para conocer nueva música.</p>
+                                    <a href="#video" class="btn btn-verde btn-sm">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">📀 Reseñas</h5>
+                                    <p class="card-text">Opiniones sencillas sobre álbumes, canciones y artistas independientes.</p>
+                                    <a href="#contacto" class="btn btn-verde btn-sm">Consultar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="p-3 m-3" id="video">
+                    <h2 class="titulo-seccion">Video Relacionado</h2>
+                    <p>Disfruta de este video musical recomendado:</p>
+                    <div class="video-container">
+                        <iframe
+                            src="https://www.youtube.com/embed/rYwXfmgNSVI"
+                            title="Video musical - EnoxhBeats"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </section>
+
+                <section class="p-3 m-3" id="contacto">
+                    <h2 class="titulo-seccion">Contacto</h2>
+                    <p>Si deseas recibir recomendaciones musicales o enviar sugerencias, completa el siguiente formulario.</p>
+
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" placeholder="Escribe tu nombre">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="correo" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="correo" placeholder="correo@ejemplo.com">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="asunto" class="form-label">Asunto</label>
+                            <input type="text" class="form-control" id="asunto" placeholder="Motivo del mensaje">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mensaje" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensaje" rows="4" placeholder="Escribe tu mensaje"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-verde">Enviar mensaje</button>
+                    </form>
+
+                    <div class="mt-4">
+                        <a href="mailto:ei.yanezs@uea.edu.ec" class="btn btn-outline-success btn-sm m-1">📧 Correo</a>
+                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm m-1">Instagram</a>
+                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm m-1">Facebook</a>
+                        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm m-1">Spotify</a>
+                    </div>
+                </section>
+
+                <article class="p-3 m-3">
+                    <h3>🎶 Canción de la semana</h3>
+                    <p>
+                        Esta semana recomendamos <em><strong>Imagination</strong></em> de <strong>Foster the People</strong>,
+                        una canción con un ritmo agradable y una buena energía para escuchar en cualquier momento.
+                    </p>
+                </article>
+            </div>
+
+            <aside class="col-lg-4 p-3 my-3">
+                <h3>ℹ️ Información</h3>
+                <p><strong>Horarios de actualización:</strong></p>
                 <ul>
-                    <li>Playlists personalizadas por género</li>
-                    <li>Recomendaciones semanales de canciones</li>
-                    <li>Top 10 canciones del mes</li>
-                    <li>Reseñas de álbumes</li>
-                    <li>Descubrimiento de artistas independientes</li>
-                    <li>Playlists para estudiar, entrenar o relajarse</li>
+                    <li>Lunes: Top semanal</li>
+                    <li>Viernes: Playlist nueva</li>
+                    <li>Domingo: Reseña de álbum</li>
                 </ul>
-            </section>
 
-            <section id="video">
-                <h2>Video Relacionado</h2>
-                <p>Disfruta de este video musical recomendado:</p>
-                <div class="video-container">
-                    <iframe
-                        src="https://www.youtube.com/embed/rYwXfmgNSVI"
-                        title="Video musical - EnoxhBeats"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            </section>
-
-            <section id="contacto">
-                <h2>Contacto</h2>
-                <p><strong>📧 Correo:</strong> <a href="mailto:ei.yanezs@uea.edu.ec">ei.yanezs@uea.edu.ec</a></p>
-                <p><strong>📞 Teléfono:</strong> <a href="tel:+593990000000">+593 99 000 0000</a></p>
-                <p><strong>📍 Dirección:</strong> Tena, Ecuador</p>
-                <p><strong>🌐 Redes sociales:</strong><br>
-                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a> |
-                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a> |
-                    <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">TikTok</a> |
-                    <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>
-                </p>
-            </section>
-
-            <article>
-                <h3>🎶 Canción de la semana</h3>
-                <p>Esta semana recomendamos <em><strong>Imagination</strong></em> de <strong>Foster the People</strong>, una joya que no es muy conocida pero tiene un beat muy pegadizo y letras inspiradoras.</p>
-            </article>
-
+                <p><strong>Géneros disponibles:</strong></p>
+                <ul>
+                    <li>Pop</li>
+                    <li>Reggaetón Alternativo</li>
+                    <li>Rock Alternativo</li>
+                    <li>Electrónica</li>
+                    <li>Indie</li>
+                </ul>
+            </aside>
         </div>
-
-        <aside>
-            <h3>ℹ️ Información</h3>
-            <p><strong>Horarios de actualización:</strong></p>
-            <ul>
-                <li>Lunes: Top semanal</li>
-                <li>Viernes: Playlist nueva</li>
-                <li>Domingo: Reseña de álbum</li>
-            </ul>
-            <p><strong>Géneros disponibles:</strong></p>
-            <ul>
-                <li>Pop</li>
-                <li>Reggaetón Alternativo</li>
-                <li>Rock-Rock Alternativo</li>
-                <li>Electrónica</li>
-                <li>Indie</li>
-            </ul>
-        </aside>
-
     </main>
 
     <footer>
         <p>Estudiante: <strong>Enoc Isaías Yanez Saltos</strong> | Asignatura: Desarrollo de Aplicaciones Web | 2026</p>
     </footer>
 
+    <!-- Bootstrap JS por CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
