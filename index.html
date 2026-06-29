@@ -4,104 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EnoxhBeats - Mi Plataforma Musical</title>
-
-    <!-- Bootstrap CSS por CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
         * {
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f5;
             color: #333;
             line-height: 1.6;
         }
-
         header {
             background: linear-gradient(135deg, #1db954, #121212);
             color: white;
             padding: 70px 20px;
             text-align: center;
         }
-
         header h1 {
             font-size: 2.6rem;
             font-weight: bold;
         }
-
         header p {
             max-width: 700px;
             margin: 15px auto 0;
             font-size: 1.1rem;
         }
-
         .navbar {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
-
         .navbar-brand {
             font-weight: bold;
             color: #1db954 !important;
         }
-
         .nav-link:hover {
             color: #1db954 !important;
         }
-
         section, article, aside {
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
         }
-
         h2, h3 {
             color: #1db954;
         }
-
         .titulo-seccion {
             border-bottom: 2px solid #1db954;
             padding-bottom: 8px;
             margin-bottom: 18px;
         }
-
         .btn-verde {
             background-color: #1db954;
             color: white;
             border: none;
         }
-
         .btn-verde:hover {
             background-color: #159c44;
             color: white;
             transform: scale(1.03);
             transition: 0.3s;
         }
-
         .card {
             border: none;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s, box-shadow 0.3s;
             height: 100%;
         }
-
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
-
         .card-title {
             color: #1db954;
             font-weight: bold;
         }
-
         .imagen-redondeada {
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-
         .video-container {
             position: relative;
             width: 100%;
@@ -110,7 +90,6 @@
             overflow: hidden;
             border-radius: 12px;
         }
-
         .video-container iframe {
             position: absolute;
             top: 0;
@@ -119,22 +98,18 @@
             height: 100%;
             border: none;
         }
-
         aside ul {
             list-style: none;
             padding-left: 0;
         }
-
         aside li {
             margin-bottom: 8px;
         }
-
         aside li::before {
             content: "♪ ";
             color: #1db954;
             font-weight: bold;
         }
-
         footer {
             background-color: #121212;
             color: white;
@@ -142,21 +117,45 @@
             padding: 25px;
             margin-top: 40px;
         }
-
-        /* Media query solicitada para pantallas pequeñas */
+        .cancion-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid #1db954;
+        }
+        .cancion-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+        .cancion-item .btn-eliminar {
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .cancion-item .btn-eliminar:hover {
+            opacity: 1;
+        }
+        .badge-categoria {
+            background-color: #1db954;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .contador-canciones {
+            background: linear-gradient(135deg, #1db954, #159c44);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: inline-block;
+        }
         @media (max-width: 576px) {
             header {
                 padding: 45px 15px;
             }
-
             header h1 {
                 font-size: 1.8rem;
             }
-
             header p {
                 font-size: 0.95rem;
             }
-
             section, article, aside {
                 padding: 18px !important;
             }
@@ -164,36 +163,32 @@
     </style>
 </head>
 <body>
-
     <header id="inicio">
         <h1>🎵 EnoxhBeats</h1>
         <p>Mi plataforma musical para descubrir playlists, canciones recomendadas y nuevos artistas.</p>
         <a href="#servicios" class="btn btn-verde mt-3">Ver servicios</a>
     </header>
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#inicio">EnoxhBeats</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="menuPrincipal">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="#quienes">Quiénes Somos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#canciones">Mis Canciones</a></li>
                     <li class="nav-item"><a class="nav-link" href="#video">Video</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <main class="container my-4">
         <div class="row g-4">
             <div class="col-lg-8">
-
                 <section class="p-3 m-3" id="bienvenida">
                     <h2 class="titulo-seccion">Inicio</h2>
                     <p>
@@ -204,7 +199,6 @@
                     <a href="#contacto" class="btn btn-verde">Contáctanos</a>
                     <a href="#quienes" class="btn btn-outline-dark">Conocer más</a>
                 </section>
-
                 <section class="p-3 m-3" id="quienes">
                     <h2 class="titulo-seccion">Quiénes Somos</h2>
                     <div class="row align-items-center">
@@ -223,7 +217,6 @@
                         </div>
                     </div>
                 </section>
-
                 <section class="p-3 m-3" id="servicios">
                     <h2 class="titulo-seccion">Servicios</h2>
                     <div class="row g-3">
@@ -232,11 +225,10 @@
                                 <div class="card-body text-center">
                                     <h5 class="card-title">🎧 Playlists</h5>
                                     <p class="card-text">Listas musicales organizadas por género, estado de ánimo o actividad.</p>
-                                    <a href="#contacto" class="btn btn-verde btn-sm">Solicitar</a>
+                                    <a href="#canciones" class="btn btn-verde btn-sm">Ver canciones</a>
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-6 col-lg-4">
                             <div class="card">
                                 <div class="card-body text-center">
@@ -246,7 +238,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-6 col-lg-4">
                             <div class="card">
                                 <div class="card-body text-center">
@@ -258,7 +249,45 @@
                         </div>
                     </div>
                 </section>
-
+                <section class="p-3 m-3" id="canciones">
+                    <h2 class="titulo-seccion">🎵 Mis Canciones</h2>
+                    <p>Registra tus canciones favoritas, agrega una descripción y una categoría musical.</p>
+                    <div class="contador-canciones mb-3">
+                        <span id="totalCanciones">0</span> canciones registradas
+                    </div>
+                    <form id="formCancion" class="mb-4 p-3 bg-light rounded">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="nombreCancion" class="form-label">Nombre de la canción *</label>
+                                <input type="text" class="form-control" id="nombreCancion" placeholder="Ej: Imagination" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="descripcionCancion" class="form-label">Descripción *</label>
+                                <input type="text" class="form-control" id="descripcionCancion" placeholder="Ej: Canción con ritmo alegre" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="categoriaCancion" class="form-label">Categoría *</label>
+                                <select class="form-select" id="categoriaCancion" required>
+                                    <option value="">Selecciona una categoría</option>
+                                    <option value="Pop">Pop</option>
+                                    <option value="Rock">Rock</option>
+                                    <option value="Reggaetón">Reggaetón</option>
+                                    <option value="Electrónica">Electrónica</option>
+                                    <option value="Indie">Indie</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-verde">➕ Agregar canción</button>
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                        </div>
+                        <div id="mensajeValidacion" class="mt-2"></div>
+                    </form>
+                    <div id="listaCanciones">
+                        <p class="text-muted" id="mensajeVacio">No hay canciones registradas aún. ¡Agrega una!</p>
+                    </div>
+                </section>
                 <section class="p-3 m-3" id="video">
                     <h2 class="titulo-seccion">Video Relacionado</h2>
                     <p>Disfruta de este video musical recomendado:</p>
@@ -270,11 +299,9 @@
                         </iframe>
                     </div>
                 </section>
-
                 <section class="p-3 m-3" id="contacto">
                     <h2 class="titulo-seccion">Contacto</h2>
                     <p>Si deseas recibir recomendaciones musicales o enviar sugerencias, completa el siguiente formulario.</p>
-
                     <form>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -286,20 +313,16 @@
                                 <input type="email" class="form-control" id="correo" placeholder="correo@ejemplo.com">
                             </div>
                         </div>
-
                         <div class="mb-3">
                             <label for="asunto" class="form-label">Asunto</label>
                             <input type="text" class="form-control" id="asunto" placeholder="Motivo del mensaje">
                         </div>
-
                         <div class="mb-3">
                             <label for="mensaje" class="form-label">Mensaje</label>
                             <textarea class="form-control" id="mensaje" rows="4" placeholder="Escribe tu mensaje"></textarea>
                         </div>
-
                         <button type="submit" class="btn btn-verde">Enviar mensaje</button>
                     </form>
-
                     <div class="mt-4">
                         <a href="mailto:ei.yanezs@uea.edu.ec" class="btn btn-outline-success btn-sm m-1">📧 Correo</a>
                         <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm m-1">Instagram</a>
@@ -307,7 +330,6 @@
                         <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm m-1">Spotify</a>
                     </div>
                 </section>
-
                 <article class="p-3 m-3">
                     <h3>🎶 Canción de la semana</h3>
                     <p>
@@ -316,7 +338,6 @@
                     </p>
                 </article>
             </div>
-
             <aside class="col-lg-4 p-3 my-3">
                 <h3>ℹ️ Información</h3>
                 <p><strong>Horarios de actualización:</strong></p>
@@ -325,7 +346,6 @@
                     <li>Viernes: Playlist nueva</li>
                     <li>Domingo: Reseña de álbum</li>
                 </ul>
-
                 <p><strong>Géneros disponibles:</strong></p>
                 <ul>
                     <li>Pop</li>
@@ -334,15 +354,17 @@
                     <li>Electrónica</li>
                     <li>Indie</li>
                 </ul>
+                <div class="mt-4 p-3 bg-light rounded">
+                    <h5>📊 Estadísticas</h5>
+                    <p id="estadisticasCanciones">No hay canciones registradas</p>
+                </div>
             </aside>
         </div>
     </main>
-
     <footer>
         <p>Estudiante: <strong>Enoc Isaías Yanez Saltos</strong> | Asignatura: Desarrollo de Aplicaciones Web | 2026</p>
     </footer>
-
-    <!-- Bootstrap JS por CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
