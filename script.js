@@ -30,80 +30,80 @@ document.addEventListener('DOMContentLoaded', function() {
     function validarNombre(nombre) {
         const feedback = document.getElementById('nombreFeedback');
         const contador = document.getElementById('nombreContador');
-        
+
         contador.textContent = nombre.length + '/50 caracteres';
-        
+
         if (nombre.length === 0) {
             inputNombre.classList.remove('is-valid', 'is-invalid');
             feedback.textContent = 'El nombre es obligatorio';
             return false;
         }
-        
+
         if (nombre.length < 2) {
             inputNombre.classList.remove('is-valid');
             inputNombre.classList.add('is-invalid');
-            feedback.innerHTML = 'El nombre debe tener al menos 2 caracteres';
+            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>El nombre debe tener al menos 2 caracteres';
             return false;
         }
-        
+
         if (nombre.length > 50) {
             inputNombre.classList.remove('is-valid');
             inputNombre.classList.add('is-invalid');
-            feedback.innerHTML = 'El nombre no puede tener mas de 50 caracteres';
+            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>El nombre no puede tener más de 50 caracteres';
             return false;
         }
-        
+
         inputNombre.classList.remove('is-invalid');
         inputNombre.classList.add('is-valid');
-        feedback.innerHTML = 'Nombre valido';
+        feedback.innerHTML = '<i class="bi bi-check-circle me-1"></i>¡Nombre válido!';
         return true;
     }
 
     function validarDescripcion(descripcion) {
         const feedback = document.getElementById('descripcionFeedback');
         const contador = document.getElementById('descripcionContador');
-        
+
         contador.textContent = descripcion.length + '/200 caracteres';
-        
+
         if (descripcion.length === 0) {
             inputDescripcion.classList.remove('is-valid', 'is-invalid');
-            feedback.textContent = 'La descripcion es obligatoria';
+            feedback.textContent = 'La descripción es obligatoria';
             return false;
         }
-        
+
         if (descripcion.length < 5) {
             inputDescripcion.classList.remove('is-valid');
             inputDescripcion.classList.add('is-invalid');
-            feedback.innerHTML = 'La descripcion debe tener al menos 5 caracteres';
+            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>La descripción debe tener al menos 5 caracteres';
             return false;
         }
-        
+
         if (descripcion.length > 200) {
             inputDescripcion.classList.remove('is-valid');
             inputDescripcion.classList.add('is-invalid');
-            feedback.innerHTML = 'La descripcion no puede tener mas de 200 caracteres';
+            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>La descripción no puede tener más de 200 caracteres';
             return false;
         }
-        
+
         inputDescripcion.classList.remove('is-invalid');
         inputDescripcion.classList.add('is-valid');
-        feedback.innerHTML = 'Descripcion valida';
+        feedback.innerHTML = '<i class="bi bi-check-circle me-1"></i>¡Descripción válida!';
         return true;
     }
 
     function validarCategoria(categoria) {
         const feedback = document.getElementById('categoriaFeedback');
-        
+
         if (!categoria || categoria === '') {
             selectCategoria.classList.remove('is-valid');
             selectCategoria.classList.add('is-invalid');
-            feedback.innerHTML = 'Debes seleccionar una categoria';
+            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>Debes seleccionar una categoría';
             return false;
         }
-        
+
         selectCategoria.classList.remove('is-invalid');
         selectCategoria.classList.add('is-valid');
-        feedback.innerHTML = 'Categoria seleccionada';
+        feedback.innerHTML = '<i class="bi bi-check-circle me-1"></i>¡Categoría seleccionada!';
         return true;
     }
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const nombreValido = validarNombre(inputNombre.value);
         const descripcionValida = validarDescripcion(inputDescripcion.value);
         const categoriaValida = validarCategoria(selectCategoria.value);
-        
+
         return nombreValido && descripcionValida && categoriaValida;
     }
 
@@ -144,46 +144,42 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ============================================
-    // ALERTA CONDICIONAL (Semana 7)
+    // ALERTA CONDICIONAL
     // ============================================
 
     function actualizarAlertaEstado() {
         const total = canciones.length;
-        
+
         if (total === 0) {
             alertaEstado.innerHTML = `
                 <div class="alert alert-warning" role="alert">
                     <i class="bi bi-exclamation-triangle me-2"></i>
-                    Playlist vacia. Agrega tu primera cancion para comenzar.
+                    Playlist vacía. Agrega tu primera canción para comenzar.
                 </div>
             `;
         } else if (total < 3) {
             alertaEstado.innerHTML = `
                 <div class="alert alert-info" role="alert">
                     <i class="bi bi-lightbulb me-2"></i>
-                    Tienes ${total} cancion${total > 1 ? 'es' : ''}. Agrega mas canciones para crear una gran playlist.
+                    Tienes ${total} canción${total > 1 ? 'es' : ''}. Agrega más canciones para crear una gran playlist.
                 </div>
             `;
         } else {
             alertaEstado.innerHTML = `
                 <div class="alert alert-success" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
-                    Excelente playlist! Tienes ${total} canciones. Sigue asi!
+                    ¡Excelente playlist! Tienes ${total} canciones. ¡Sigue así!
                 </div>
             `;
         }
     }
 
     // ============================================
-    // SPINNER (requisito Semana 8)
+    // SPINNER
     // ============================================
 
     function mostrarSpinner(mostrar) {
-        if (mostrar) {
-            spinnerContainer.style.display = 'block';
-        } else {
-            spinnerContainer.style.display = 'none';
-        }
+        spinnerContainer.style.display = mostrar ? 'block' : 'none';
     }
 
     // ============================================
@@ -193,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function actualizarContador() {
         const total = canciones.length;
         totalCancionesSpan.textContent = total;
-        
+
         if (total === 0) {
             estadisticasDiv.textContent = '0 canciones';
             estadisticasDiv.className = 'fw-semibold text-muted';
@@ -202,8 +198,8 @@ document.addEventListener('DOMContentLoaded', function() {
             canciones.forEach(c => {
                 categorias[c.categoria] = (categorias[c.categoria] || 0) + 1;
             });
-            
-            let textoEstadisticas = total + ' cancion' + (total > 1 ? 'es' : '');
+
+            let textoEstadisticas = total + ' canción' + (total > 1 ? 'es' : '');
             let categoriasTexto = [];
             for (const [categoria, cantidad] of Object.entries(categorias)) {
                 categoriasTexto.push(categoria + ': ' + cantidad);
@@ -214,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
             estadisticasDiv.textContent = textoEstadisticas;
             estadisticasDiv.className = 'fw-semibold';
         }
-        
+
         actualizarAlertaEstado();
     }
 
@@ -225,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alertDiv.role = 'alert';
         alertDiv.innerHTML = mensaje + ' <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
         mensajeValidacion.appendChild(alertDiv);
-        
+
         if (tipo === 'success') {
             setTimeout(function() {
                 const alert = mensajeValidacion.querySelector('.alert');
@@ -241,46 +237,46 @@ document.addEventListener('DOMContentLoaded', function() {
         const div = document.createElement('div');
         div.className = 'cancion-item d-flex justify-content-between align-items-center p-3 mb-2';
         div.setAttribute('data-index', index);
-        
+
         const infoDiv = document.createElement('div');
         infoDiv.className = 'flex-grow-1';
-        
+
         const titulo = document.createElement('h6');
-        titulo.className = 'mb-1 fw-bold text-white';
+        titulo.className = 'mb-1 fw-bold';
         titulo.textContent = cancion.nombre;
-        
+
         const descripcion = document.createElement('p');
         descripcion.className = 'mb-0 text-muted small';
         descripcion.textContent = cancion.descripcion;
-        
+
         const categoriaSpan = document.createElement('span');
         categoriaSpan.className = 'badge-categoria ms-2';
         categoriaSpan.textContent = cancion.categoria;
-        
+
         infoDiv.appendChild(titulo);
         infoDiv.appendChild(descripcion);
         infoDiv.appendChild(categoriaSpan);
-        
+
         const btnEliminar = document.createElement('button');
         btnEliminar.className = 'btn btn-outline-danger btn-sm btn-eliminar';
         btnEliminar.innerHTML = '<i class="bi bi-trash me-1"></i>Eliminar';
-        btnEliminar.setAttribute('aria-label', 'Eliminar cancion');
-        
+        btnEliminar.setAttribute('aria-label', 'Eliminar canción');
+
         btnEliminar.addEventListener('click', function(e) {
             e.stopPropagation();
             eliminarCancion(index);
         });
-        
+
         div.appendChild(infoDiv);
         div.appendChild(btnEliminar);
-        
+
         return div;
     }
 
     function renderizarCanciones() {
         const items = listaCanciones.querySelectorAll('.cancion-item');
         items.forEach(function(item) { item.remove(); });
-        
+
         if (canciones.length === 0) {
             mensajeVacio.style.display = 'block';
         } else {
@@ -290,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 listaCanciones.appendChild(elemento);
             });
         }
-        
+
         actualizarContador();
     }
 
@@ -300,16 +296,16 @@ document.addEventListener('DOMContentLoaded', function() {
             descripcion: descripcion.trim(),
             categoria: categoria
         };
-        
+
         canciones.push(nuevaCancion);
         renderizarCanciones();
-        
-        // Mostrar modal con la informacion (requisito Semana 8)
+
+        // Mostrar modal con la información
         modalCancionNombre.textContent = nuevaCancion.nombre;
-        modalCancionCategoria.textContent = 'Categoria: ' + nuevaCancion.categoria;
+        modalCancionCategoria.textContent = 'Categoría: ' + nuevaCancion.categoria;
         modalMensaje.textContent = '"' + nuevaCancion.nombre + '" se ha agregado exitosamente.';
         modalConfirmacion.show();
-        
+
         mostrarMensajeValidacion('"' + nombre + '" agregada a tu playlist', 'success');
     }
 
@@ -328,33 +324,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     formCancion.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         if (validarFormularioCompleto()) {
             const nombre = inputNombre.value;
             const descripcion = inputDescripcion.value;
             const categoria = selectCategoria.value;
-            
-            // Mostrar spinner (requisito Semana 8)
+
             mostrarSpinner(true);
-            
+
             // Simular proceso de carga
             setTimeout(function() {
                 agregarCancion(nombre, descripcion, categoria);
                 mostrarSpinner(false);
-                
-                // Resetear el formulario
+
                 formCancion.reset();
                 inputNombre.classList.remove('is-valid', 'is-invalid');
                 inputDescripcion.classList.remove('is-valid', 'is-invalid');
                 selectCategoria.classList.remove('is-valid', 'is-invalid');
                 document.getElementById('nombreFeedback').textContent = 'El nombre es obligatorio';
-                document.getElementById('descripcionFeedback').textContent = 'La descripcion es obligatoria';
-                document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoria';
+                document.getElementById('descripcionFeedback').textContent = 'La descripción es obligatoria';
+                document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoría';
                 nombreContador.textContent = '0/50 caracteres';
                 descripcionContador.textContent = '0/200 caracteres';
                 inputNombre.focus();
             }, 800);
-            
+
         } else {
             mostrarMensajeValidacion('Completa todos los campos correctamente', 'danger');
         }
@@ -368,8 +362,8 @@ document.addEventListener('DOMContentLoaded', function() {
             selectCategoria.classList.remove('is-valid', 'is-invalid');
             mensajeValidacion.innerHTML = '';
             document.getElementById('nombreFeedback').textContent = 'El nombre es obligatorio';
-            document.getElementById('descripcionFeedback').textContent = 'La descripcion es obligatoria';
-            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoria';
+            document.getElementById('descripcionFeedback').textContent = 'La descripción es obligatoria';
+            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoría';
             nombreContador.textContent = '0/50 caracteres';
             descripcionContador.textContent = '0/200 caracteres';
             inputNombre.focus();
