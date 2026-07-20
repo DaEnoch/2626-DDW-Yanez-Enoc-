@@ -11,6 +11,30 @@ body {
     color: #fff;
 }
 
+/* Estilo para el navbar */
+.navbar {
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-brand .titulo-principal {
+    background: linear-gradient(135deg, #1DB954 0%, #1ED760 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #1DB954 !important;
+}
+
+.navbar .nav-link.active {
+    color: #1DB954 !important;
+}
 
 .titulo-principal {
     background: linear-gradient(135deg, #1DB954 0%, #1ED760 100%);
@@ -40,7 +64,6 @@ body {
     border: 1px solid rgba(29, 185, 84, 0.2) !important;
 }
 
-/* Estilos para los campos de validación */
 .form-control, .form-select {
     background-color: #1a1a1a !important;
     border: 2px solid #2d2d2d !important;
@@ -59,7 +82,6 @@ body {
     color: #6c757d !important;
 }
 
-/* Estados de validación de Bootstrap */
 .form-control.is-valid, .form-select.is-valid {
     border-color: #1DB954 !important;
     background-image: none !important;
@@ -83,7 +105,6 @@ body {
     color: #1DB954;
 }
 
-/* Tarjetas de canciones estilo Spotify */
 .cancion-item {
     background: #1a1a1a !important;
     border: 1px solid #2d2d2d !important;
@@ -108,7 +129,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Botón Eliminar */
 .btn-eliminar {
     background: transparent !important;
     border: 1px solid #dc3545 !important;
@@ -122,7 +142,6 @@ body {
     border-color: #dc3545 !important;
 }
 
-/* Card y estilos de contenedores */
 .card {
     background: #121212 !important;
     border: none !important;
@@ -156,7 +175,6 @@ body {
     color: #fff !important;
 }
 
-/* Alertas personalizadas */
 .alert-success {
     background: rgba(29, 185, 84, 0.2) !important;
     border: 1px solid #1DB954 !important;
@@ -169,10 +187,34 @@ body {
     color: #dc3545 !important;
 }
 
-/* Contador de caracteres */
+.alert-warning {
+    background: rgba(255, 193, 7, 0.2) !important;
+    border: 1px solid #ffc107 !important;
+    color: #ffc107 !important;
+}
+
+.alert-info {
+    background: rgba(13, 202, 240, 0.2) !important;
+    border: 1px solid #0dcaf0 !important;
+    color: #0dcaf0 !important;
+}
+
 .text-muted {
     color: #6c757d !important;
     font-size: 0.8rem;
+}
+
+/* Modal estilo oscuro */
+.modal-content {
+    border: 1px solid #2d2d2d !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid #2d2d2d !important;
+}
+
+.modal-footer {
+    border-top: 1px solid #2d2d2d !important;
 }
 
 /* Responsive */
@@ -193,5 +235,9 @@ body {
     
     .btn-eliminar {
         width: 100%;
+    }
+    
+    .navbar-brand .titulo-principal {
+        font-size: 1.5rem !important;
     }
 }

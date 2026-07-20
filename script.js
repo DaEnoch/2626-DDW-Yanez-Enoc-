@@ -13,6 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const nombreContador = document.getElementById('nombreContador');
     const descripcionContador = document.getElementById('descripcionContador');
     const alertaEstado = document.getElementById('alertaEstado');
+    const spinnerContainer = document.getElementById('spinnerContainer');
+
+    // Modal
+    const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+    const modalCancionNombre = document.getElementById('modalCancionNombre');
+    const modalCancionCategoria = document.getElementById('modalCancionCategoria');
+    const modalMensaje = document.getElementById('modalMensaje');
 
     let canciones = [];
 
@@ -137,8 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ============================================
-    // ALERTA CONDICIONAL (requisito Semana 7)
-    // Muestra mensaje segun estado de los datos
+    // ALERTA CONDICIONAL (Semana 7)
     // ============================================
 
     function actualizarAlertaEstado() {
@@ -165,6 +171,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     Excelente playlist! Tienes ${total} canciones. Sigue asi!
                 </div>
             `;
+        }
+    }
+
+    // ============================================
+    // SPINNER (requisito Semana 8)
+    // ============================================
+
+    function mostrarSpinner(mostrar) {
+        if (mostrar) {
+            spinnerContainer.style.display = 'block';
+        } else {
+            spinnerContainer.style.display = 'none';
         }
     }
 
@@ -197,7 +215,6 @@ document.addEventListener('DOMContentLoaded', function() {
             estadisticasDiv.className = 'fw-semibold';
         }
         
-        // Actualizar alerta condicional
         actualizarAlertaEstado();
     }
 
@@ -286,7 +303,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         canciones.push(nuevaCancion);
         renderizarCanciones();
-        mostrarMensajeValidacion('✅ "' + nombre + '" agregada a tu playlist', 'success');
+        
+        // Mostrar modal con la informacion (requisito Semana 8)
+        modalCancionNombre.textContent = nuevaCancion.nombre;
+        modalCancionCategoria.textContent = 'Categoria: ' + nuevaCancion.categoria;
+        modalMensaje.textContent = '"' + nuevaCancion.nombre + '" se ha agregado exitosamente.';
+        modalConfirmacion.show();
+        
+        mostrarMensajeValidacion('"' + nombre + '" agregada a tu playlist', 'success');
     }
 
     function eliminarCancion(index) {
@@ -294,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombreEliminado = canciones[index].nombre;
             canciones.splice(index, 1);
             renderizarCanciones();
-            mostrarMensajeValidacion('🗑️ "' + nombreEliminado + '" eliminada de tu playlist', 'success');
+            mostrarMensajeValidacion('"' + nombreEliminado + '" eliminada de tu playlist', 'success');
         }
     }
 
@@ -310,21 +334,29 @@ document.addEventListener('DOMContentLoaded', function() {
             const descripcion = inputDescripcion.value;
             const categoria = selectCategoria.value;
             
-            agregarCancion(nombre, descripcion, categoria);
+            // Mostrar spinner (requisito Semana 8)
+            mostrarSpinner(true);
             
-            // Resetear el formulario
-            formCancion.reset();
-            inputNombre.classList.remove('is-valid', 'is-invalid');
-            inputDescripcion.classList.remove('is-valid', 'is-invalid');
-            selectCategoria.classList.remove('is-valid', 'is-invalid');
-            document.getElementById('nombreFeedback').textContent = 'El nombre es obligatorio';
-            document.getElementById('descripcionFeedback').textContent = 'La descripcion es obligatoria';
-            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoria';
-            nombreContador.textContent = '0/50 caracteres';
-            descripcionContador.textContent = '0/200 caracteres';
-            inputNombre.focus();
+            // Simular proceso de carga
+            setTimeout(function() {
+                agregarCancion(nombre, descripcion, categoria);
+                mostrarSpinner(false);
+                
+                // Resetear el formulario
+                formCancion.reset();
+                inputNombre.classList.remove('is-valid', 'is-invalid');
+                inputDescripcion.classList.remove('is-valid', 'is-invalid');
+                selectCategoria.classList.remove('is-valid', 'is-invalid');
+                document.getElementById('nombreFeedback').textContent = 'El nombre es obligatorio';
+                document.getElementById('descripcionFeedback').textContent = 'La descripcion es obligatoria';
+                document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoria';
+                nombreContador.textContent = '0/50 caracteres';
+                descripcionContador.textContent = '0/200 caracteres';
+                inputNombre.focus();
+            }, 800);
+            
         } else {
-            mostrarMensajeValidacion('❌ Completa todos los campos correctamente', 'danger');
+            mostrarMensajeValidacion('Completa todos los campos correctamente', 'danger');
         }
     });
 
