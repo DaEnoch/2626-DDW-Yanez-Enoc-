@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     // Referencias a elementos
     const formCancion = document.getElementById('formCancion');
     const inputNombre = document.getElementById('nombreCancion');
@@ -11,18 +12,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const mensajeValidacion = document.getElementById('mensajeValidacion');
     const nombreContador = document.getElementById('nombreContador');
     const descripcionContador = document.getElementById('descripcionContador');
+    const alertaEstado = document.getElementById('alertaEstado');
 
     let canciones = [];
 
-    
+    // ============================================
+    // FUNCIONES DE VALIDACION
+    // ============================================
 
-    // Validar campo nombre
     function validarNombre(nombre) {
         const feedback = document.getElementById('nombreFeedback');
         const contador = document.getElementById('nombreContador');
         
-        // Actualizar contador
-        contador.textContent = `${nombre.length}/50 caracteres`;
+        contador.textContent = nombre.length + '/50 caracteres';
         
         if (nombre.length === 0) {
             inputNombre.classList.remove('is-valid', 'is-invalid');
@@ -33,75 +35,71 @@ document.addEventListener('DOMContentLoaded', function() {
         if (nombre.length < 2) {
             inputNombre.classList.remove('is-valid');
             inputNombre.classList.add('is-invalid');
-            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i> El nombre debe tener al menos 2 caracteres';
+            feedback.innerHTML = 'El nombre debe tener al menos 2 caracteres';
             return false;
         }
         
         if (nombre.length > 50) {
             inputNombre.classList.remove('is-valid');
             inputNombre.classList.add('is-invalid');
-            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i> El nombre no puede tener más de 50 caracteres';
+            feedback.innerHTML = 'El nombre no puede tener mas de 50 caracteres';
             return false;
         }
         
         inputNombre.classList.remove('is-invalid');
         inputNombre.classList.add('is-valid');
-        feedback.innerHTML = '<i class="bi bi-check-circle me-1"></i> ¡Nombre válido!';
+        feedback.innerHTML = 'Nombre valido';
         return true;
     }
 
-    // Validar campo descripción
     function validarDescripcion(descripcion) {
         const feedback = document.getElementById('descripcionFeedback');
         const contador = document.getElementById('descripcionContador');
         
-        // Actualizar contador
-        contador.textContent = `${descripcion.length}/200 caracteres`;
+        contador.textContent = descripcion.length + '/200 caracteres';
         
         if (descripcion.length === 0) {
             inputDescripcion.classList.remove('is-valid', 'is-invalid');
-            feedback.textContent = 'La descripción es obligatoria';
+            feedback.textContent = 'La descripcion es obligatoria';
             return false;
         }
         
         if (descripcion.length < 5) {
             inputDescripcion.classList.remove('is-valid');
             inputDescripcion.classList.add('is-invalid');
-            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i> La descripción debe tener al menos 5 caracteres';
+            feedback.innerHTML = 'La descripcion debe tener al menos 5 caracteres';
             return false;
         }
         
         if (descripcion.length > 200) {
             inputDescripcion.classList.remove('is-valid');
             inputDescripcion.classList.add('is-invalid');
-            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i> La descripción no puede tener más de 200 caracteres';
+            feedback.innerHTML = 'La descripcion no puede tener mas de 200 caracteres';
             return false;
         }
         
         inputDescripcion.classList.remove('is-invalid');
         inputDescripcion.classList.add('is-valid');
-        feedback.innerHTML = '<i class="bi bi-check-circle me-1"></i> ¡Descripción válida!';
+        feedback.innerHTML = 'Descripcion valida';
         return true;
     }
 
-    // Validar campo categoría
     function validarCategoria(categoria) {
         const feedback = document.getElementById('categoriaFeedback');
         
         if (!categoria || categoria === '') {
             selectCategoria.classList.remove('is-valid');
             selectCategoria.classList.add('is-invalid');
-            feedback.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i> Debes seleccionar una categoría';
+            feedback.innerHTML = 'Debes seleccionar una categoria';
             return false;
         }
         
         selectCategoria.classList.remove('is-invalid');
         selectCategoria.classList.add('is-valid');
-        feedback.innerHTML = '<i class="bi bi-check-circle me-1"></i> ¡Categoría seleccionada!';
+        feedback.innerHTML = 'Categoria seleccionada';
         return true;
     }
 
-    // Validar todo el formulario
     function validarFormularioCompleto() {
         const nombreValido = validarNombre(inputNombre.value);
         const descripcionValida = validarDescripcion(inputDescripcion.value);
@@ -110,38 +108,69 @@ document.addEventListener('DOMContentLoaded', function() {
         return nombreValido && descripcionValida && categoriaValida;
     }
 
-    
+    // ============================================
+    // EVENTOS DE VALIDACION EN TIEMPO REAL
+    // ============================================
 
-    // Evento input para nombre
     inputNombre.addEventListener('input', function() {
         validarNombre(this.value);
     });
 
-    // Evento blur para nombre (cuando pierde el foco)
     inputNombre.addEventListener('blur', function() {
         if (this.value.length > 0) {
             validarNombre(this.value);
         }
     });
 
-    // Evento input para descripción
     inputDescripcion.addEventListener('input', function() {
         validarDescripcion(this.value);
     });
 
-    // Evento blur para descripción
     inputDescripcion.addEventListener('blur', function() {
         if (this.value.length > 0) {
             validarDescripcion(this.value);
         }
     });
 
-    // Evento change para categoría
     selectCategoria.addEventListener('change', function() {
         validarCategoria(this.value);
     });
 
-    // ========== FUNCIONES DE GESTIÓN DE CANCIONES ==========
+    // ============================================
+    // ALERTA CONDICIONAL (requisito Semana 7)
+    // Muestra mensaje segun estado de los datos
+    // ============================================
+
+    function actualizarAlertaEstado() {
+        const total = canciones.length;
+        
+        if (total === 0) {
+            alertaEstado.innerHTML = `
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Playlist vacia. Agrega tu primera cancion para comenzar.
+                </div>
+            `;
+        } else if (total < 3) {
+            alertaEstado.innerHTML = `
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-lightbulb me-2"></i>
+                    Tienes ${total} cancion${total > 1 ? 'es' : ''}. Agrega mas canciones para crear una gran playlist.
+                </div>
+            `;
+        } else {
+            alertaEstado.innerHTML = `
+                <div class="alert alert-success" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    Excelente playlist! Tienes ${total} canciones. Sigue asi!
+                </div>
+            `;
+        }
+    }
+
+    // ============================================
+    // FUNCIONES DE GESTION DE CANCIONES
+    // ============================================
 
     function actualizarContador() {
         const total = canciones.length;
@@ -156,36 +185,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 categorias[c.categoria] = (categorias[c.categoria] || 0) + 1;
             });
             
-            let textoEstadisticas = `${total} canción${total > 1 ? 'es' : ''}`;
+            let textoEstadisticas = total + ' cancion' + (total > 1 ? 'es' : '');
             let categoriasTexto = [];
             for (const [categoria, cantidad] of Object.entries(categorias)) {
-                categoriasTexto.push(`${categoria}: ${cantidad}`);
+                categoriasTexto.push(categoria + ': ' + cantidad);
             }
             if (categoriasTexto.length > 0) {
-                textoEstadisticas += ` | ${categoriasTexto.join(' • ')}`;
+                textoEstadisticas += ' | ' + categoriasTexto.join(' • ');
             }
             estadisticasDiv.textContent = textoEstadisticas;
             estadisticasDiv.className = 'fw-semibold';
         }
+        
+        // Actualizar alerta condicional
+        actualizarAlertaEstado();
     }
 
-    function mostrarMensajeValidacion(mensaje, tipo = 'success') {
+    function mostrarMensajeValidacion(mensaje, tipo) {
         mensajeValidacion.innerHTML = '';
         const alertDiv = document.createElement('div');
-        alertDiv.className = `alert alert-${tipo} alert-dismissible fade show`;
+        alertDiv.className = 'alert alert-' + tipo + ' alert-dismissible fade show';
         alertDiv.role = 'alert';
-        alertDiv.innerHTML = `
-            ${mensaje}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
+        alertDiv.innerHTML = mensaje + ' <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
         mensajeValidacion.appendChild(alertDiv);
         
         if (tipo === 'success') {
-            setTimeout(() => {
+            setTimeout(function() {
                 const alert = mensajeValidacion.querySelector('.alert');
                 if (alert) {
                     alert.classList.remove('show');
-                    setTimeout(() => alert.remove(), 150);
+                    setTimeout(function() { alert.remove(); }, 150);
                 }
             }, 3000);
         }
@@ -218,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const btnEliminar = document.createElement('button');
         btnEliminar.className = 'btn btn-outline-danger btn-sm btn-eliminar';
         btnEliminar.innerHTML = '<i class="bi bi-trash me-1"></i>Eliminar';
-        btnEliminar.setAttribute('aria-label', 'Eliminar canción');
+        btnEliminar.setAttribute('aria-label', 'Eliminar cancion');
         
         btnEliminar.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -233,13 +262,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderizarCanciones() {
         const items = listaCanciones.querySelectorAll('.cancion-item');
-        items.forEach(item => item.remove());
+        items.forEach(function(item) { item.remove(); });
         
         if (canciones.length === 0) {
             mensajeVacio.style.display = 'block';
         } else {
             mensajeVacio.style.display = 'none';
-            canciones.forEach((cancion, index) => {
+            canciones.forEach(function(cancion, index) {
                 const elemento = crearElementoCancion(cancion, index);
                 listaCanciones.appendChild(elemento);
             });
@@ -257,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         canciones.push(nuevaCancion);
         renderizarCanciones();
-        mostrarMensajeValidacion(`✅ ¡"${nombre}" agregada a tu playlist!`, 'success');
+        mostrarMensajeValidacion('✅ "' + nombre + '" agregada a tu playlist', 'success');
     }
 
     function eliminarCancion(index) {
@@ -265,16 +294,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombreEliminado = canciones[index].nombre;
             canciones.splice(index, 1);
             renderizarCanciones();
-            mostrarMensajeValidacion(`🗑️ "${nombreEliminado}" eliminada de tu playlist`, 'success');
+            mostrarMensajeValidacion('🗑️ "' + nombreEliminado + '" eliminada de tu playlist', 'success');
         }
     }
 
-    // ========== EVENTO SUBMIT DEL FORMULARIO ==========
+    // ============================================
+    // EVENTO SUBMIT DEL FORMULARIO
+    // ============================================
 
     formCancion.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Validar todo antes de enviar
         if (validarFormularioCompleto()) {
             const nombre = inputNombre.value;
             const descripcion = inputDescripcion.value;
@@ -282,35 +312,39 @@ document.addEventListener('DOMContentLoaded', function() {
             
             agregarCancion(nombre, descripcion, categoria);
             
-            // Resetear el formulario (limpia los campos y las validaciones)
+            // Resetear el formulario
             formCancion.reset();
             inputNombre.classList.remove('is-valid', 'is-invalid');
             inputDescripcion.classList.remove('is-valid', 'is-invalid');
             selectCategoria.classList.remove('is-valid', 'is-invalid');
             document.getElementById('nombreFeedback').textContent = 'El nombre es obligatorio';
-            document.getElementById('descripcionFeedback').textContent = 'La descripción es obligatoria';
-            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoría';
+            document.getElementById('descripcionFeedback').textContent = 'La descripcion es obligatoria';
+            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoria';
             nombreContador.textContent = '0/50 caracteres';
             descripcionContador.textContent = '0/200 caracteres';
             inputNombre.focus();
         } else {
-            mostrarMensajeValidacion('❌ Por favor, completa todos los campos correctamente', 'danger');
+            mostrarMensajeValidacion('❌ Completa todos los campos correctamente', 'danger');
         }
     });
 
-    // Evento reset - limpiar validaciones
+    // Evento reset
     formCancion.addEventListener('reset', function(e) {
-        setTimeout(() => {
+        setTimeout(function() {
             inputNombre.classList.remove('is-valid', 'is-invalid');
             inputDescripcion.classList.remove('is-valid', 'is-invalid');
             selectCategoria.classList.remove('is-valid', 'is-invalid');
             mensajeValidacion.innerHTML = '';
             document.getElementById('nombreFeedback').textContent = 'El nombre es obligatorio';
-            document.getElementById('descripcionFeedback').textContent = 'La descripción es obligatoria';
-            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoría';
+            document.getElementById('descripcionFeedback').textContent = 'La descripcion es obligatoria';
+            document.getElementById('categoriaFeedback').textContent = 'Debes seleccionar una categoria';
             nombreContador.textContent = '0/50 caracteres';
             descripcionContador.textContent = '0/200 caracteres';
             inputNombre.focus();
         }, 0);
     });
+
+    // Inicializar alerta condicional
+    actualizarAlertaEstado();
+
 });

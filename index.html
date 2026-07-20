@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎵 MiMusic - Plataforma Musical</title>
+    <title>MiMusic - Plataforma Musical</title>
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,177 +15,204 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container py-4">
-        
-        <header class="d-flex justify-content-between align-items-center mb-5">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-music-note-beamed text-success fs-1 me-2"></i>
-                <h1 class="fw-bold titulo-principal">MiMusic</h1>
-                <span class="badge bg-success ms-2">Beta</span>
-            </div>
-            <div class="d-flex align-items-center gap-3">
-                <span class="text-muted"><i class="bi bi-mic"></i> Creador de Playlists</span>
-                <div class="circulo-verde"></div>
-            </div>
-        </header>
 
-        <!-- MENSAJE DE BIENVENIDA ESTILO SPOTIFY -->
-        <div class="alert alert-dark border-0 rounded-4 p-4 mb-4 shadow-lg fondo-bienvenida">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-spotify text-success fs-1 me-3"></i>
-                <div>
-                    <h3 class="fw-bold mb-0">🎧 Crea tu Playlist</h3>
-                    <p class="text-muted mb-0">Agrega canciones y construye la banda sonora de tu vida</p>
-                </div>
+<!-- ========================================================== -->
+<!-- PLANTILLA: base.html                                       -->
+<!-- Estructura principal de la pagina                          -->
+<!-- Contiene: header, contenido principal y footer             -->
+<!-- ========================================================== -->
+
+<div class="container py-4">
+    
+    <!-- ====================================================== -->
+    <!-- BLOQUE: header.html                                   -->
+    <!-- Encabezado con titulo, logo y estado                  -->
+    <!-- ====================================================== -->
+    <header class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-music-note-beamed text-success fs-1 me-2"></i>
+            <h1 class="fw-bold titulo-principal">MiMusic</h1>
+            <span class="badge bg-success ms-2">Beta</span>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted"><i class="bi bi-mic"></i> Creador de Playlists</span>
+            <div class="circulo-verde"></div>
+        </div>
+    </header>
+    <!-- FIN BLOQUE: header.html -->
+
+    <!-- ====================================================== -->
+    <!-- BLOQUE: mensaje_bienvenida.html                       -->
+    <!-- Mensaje de bienvenida y llamada a la accion           -->
+    <!-- ====================================================== -->
+    <div class="alert alert-dark border-0 rounded-4 p-4 mb-4 shadow-lg fondo-bienvenida">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-spotify text-success fs-1 me-3"></i>
+            <div>
+                <h3 class="fw-bold mb-0">Crea tu Playlist</h3>
+                <p class="text-muted mb-0">Agrega canciones y construye la banda sonora de tu vida</p>
             </div>
         </div>
-
-        <!-- FORMULARIO CON VALIDACIONES -->
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="card shadow-lg border-0 rounded-4">
-                    <div class="card-header bg-dark text-white rounded-top-4 p-3">
-                        <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Agregar Canción</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <form id="formCancion" novalidate>
-                            <!-- Campo Nombre -->
-                            <div class="mb-3">
-                                <label for="nombreCancion" class="form-label fw-semibold">
-                                    <i class="bi bi-music-note me-1"></i>Nombre de la canción
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" 
-                                       class="form-control form-control-lg" 
-                                       id="nombreCancion" 
-                                       placeholder="Ej: Bohemian Rhapsody"
-                                       minlength="2"
-                                       maxlength="50"
-                                       required>
-                                <div class="invalid-feedback" id="nombreFeedback">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    El nombre debe tener al menos 2 caracteres
-                                </div>
-                                <div class="valid-feedback">
-                                    <i class="bi bi-check-circle me-1"></i>
-                                    ¡Nombre válido!
-                                </div>
-                                <small class="text-muted" id="nombreContador">0/50 caracteres</small>
-                            </div>
-
-                            <!-- Campo Descripción -->
-                            <div class="mb-3">
-                                <label for="descripcionCancion" class="form-label fw-semibold">
-                                    <i class="bi bi-text-paragraph me-1"></i>Descripción
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <textarea class="form-control" 
-                                          id="descripcionCancion" 
-                                          rows="3"
-                                          placeholder="Describe brevemente la canción..."
-                                          minlength="5"
-                                          maxlength="200"
-                                          required></textarea>
-                                <div class="invalid-feedback" id="descripcionFeedback">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    La descripción debe tener al menos 5 caracteres
-                                </div>
-                                <div class="valid-feedback">
-                                    <i class="bi bi-check-circle me-1"></i>
-                                    ¡Descripción válida!
-                                </div>
-                                <small class="text-muted" id="descripcionContador">0/200 caracteres</small>
-                            </div>
-
-                            <!-- Campo Categoría -->
-                            <div class="mb-4">
-                                <label for="categoriaCancion" class="form-label fw-semibold">
-                                    <i class="bi bi-tag me-1"></i>Categoría
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-select form-select-lg" id="categoriaCancion" required>
-                                    <option value="">Selecciona una categoría...</option>
-                                    <option value="Rock">🎸 Rock</option>
-                                    <option value="Pop">🎤 Pop</option>
-                                    <option value="Electrónica">🎹 Electrónica</option>
-                                    <option value="Jazz">🎷 Jazz</option>
-                                    <option value="Clásica">🎻 Clásica</option>
-                                    <option value="Reggaeton">🔥 Reggaeton</option>
-                                    <option value="Indie">🎧 Indie</option>
-                                    <option value="Hip Hop">🎙️ Hip Hop</option>
-                                </select>
-                                <div class="invalid-feedback" id="categoriaFeedback">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    Debes seleccionar una categoría
-                                </div>
-                                <div class="valid-feedback">
-                                    <i class="bi bi-check-circle me-1"></i>
-                                    ¡Categoría válida!
-                                </div>
-                            </div>
-
-                            <!-- Mensajes de validación -->
-                            <div id="mensajeValidacion"></div>
-
-                            <!-- Botones -->
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-success btn-lg flex-grow-1">
-                                    <i class="bi bi-plus-circle me-2"></i>Agregar Canción
-                                </button>
-                                <button type="reset" class="btn btn-outline-secondary btn-lg">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LISTA DE CANCIONES -->
-            <div class="col-lg-7">
-                <div class="card shadow-lg border-0 rounded-4">
-                    <div class="card-header bg-dark text-white rounded-top-4 p-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Tu Playlist</h5>
-                        <span class="badge bg-success rounded-pill fs-6" id="totalCanciones">0</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <div id="listaCanciones" class="p-3">
-                            <div id="mensajeVacio" class="text-center py-5">
-                                <i class="bi bi-music-note-beamed display-1 text-muted"></i>
-                                <p class="text-muted mt-3">No hay canciones en tu playlist</p>
-                                <p class="text-muted small">¡Agrega tu primera canción!</p>
-                            </div>
-                        </div>
-                        <div class="border-top p-3 bg-light">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">
-                                    <i class="bi bi-stats me-1"></i>Estadísticas
-                                </span>
-                                <span class="fw-semibold" id="estadisticasCanciones">0 canciones</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        
-        <footer class="mt-5 pt-3 border-top">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <i class="bi bi-music-note-beamed text-success me-1"></i>
-                    <span class="text-muted small">MiMusic © 2026</span>
-                </div>
-                <div class="text-muted small">
-                    <i class="bi bi-heart-fill text-danger me-1"></i>
-                    Hecho con ❤️ por [Tu nombre]
-                </div>
-            </div>
-        </footer>
     </div>
+    <!-- FIN BLOQUE: mensaje_bienvenida.html -->
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <!-- ====================================================== -->
+    <!-- BLOQUE: contenido_principal.html                      -->
+    <!-- Formulario de registro y lista de canciones           -->
+    <!-- ====================================================== -->
+    <div class="row">
+        
+        <!-- COLUMNA FORMULARIO -->
+        <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white rounded-top-4 p-3">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Agregar Cancion</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form id="formCancion" novalidate>
+                        
+                        <div class="mb-3">
+                            <label for="nombreCancion" class="form-label fw-semibold">
+                                <i class="bi bi-music-note me-1"></i>Nombre de la cancion
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="nombreCancion" 
+                                   placeholder="Ej: Bohemian Rhapsody"
+                                   minlength="2"
+                                   maxlength="50"
+                                   required>
+                            <div class="invalid-feedback" id="nombreFeedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                El nombre debe tener al menos 2 caracteres
+                            </div>
+                            <div class="valid-feedback">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Nombre valido
+                            </div>
+                            <small class="text-muted" id="nombreContador">0/50 caracteres</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descripcionCancion" class="form-label fw-semibold">
+                                <i class="bi bi-text-paragraph me-1"></i>Descripcion
+                                <span class="text-danger">*</span>
+                            </label>
+                            <textarea class="form-control" 
+                                      id="descripcionCancion" 
+                                      rows="3"
+                                      placeholder="Describe brevemente la cancion..."
+                                      minlength="5"
+                                      maxlength="200"
+                                      required></textarea>
+                            <div class="invalid-feedback" id="descripcionFeedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                La descripcion debe tener al menos 5 caracteres
+                            </div>
+                            <div class="valid-feedback">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Descripcion valida
+                            </div>
+                            <small class="text-muted" id="descripcionContador">0/200 caracteres</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="categoriaCancion" class="form-label fw-semibold">
+                                <i class="bi bi-tag me-1"></i>Categoria
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select form-select-lg" id="categoriaCancion" required>
+                                <option value="">Selecciona una categoria...</option>
+                                <option value="Rock">Rock</option>
+                                <option value="Pop">Pop</option>
+                                <option value="Electronica">Electronica</option>
+                                <option value="Jazz">Jazz</option>
+                                <option value="Clasica">Clasica</option>
+                                <option value="Reggaeton">Reggaeton</option>
+                                <option value="Indie">Indie</option>
+                                <option value="Hip Hop">Hip Hop</option>
+                            </select>
+                            <div class="invalid-feedback" id="categoriaFeedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                Debes seleccionar una categoria
+                            </div>
+                            <div class="valid-feedback">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Categoria seleccionada
+                            </div>
+                        </div>
+
+                        <div id="mensajeValidacion"></div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success btn-lg flex-grow-1">
+                                <i class="bi bi-plus-circle me-2"></i>Agregar Cancion
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA LISTA DE CANCIONES -->
+        <div class="col-lg-7">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white rounded-top-4 p-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Tu Playlist</h5>
+                    <span class="badge bg-success rounded-pill fs-6" id="totalCanciones">0</span>
+                </div>
+                <div class="card-body p-0">
+                    
+                    <!-- ZONA DE ALERTA CONDICIONAL (requisito Semana 7) -->
+                    <div id="alertaEstado" class="mx-3 mt-3"></div>
+                    
+                    <div id="listaCanciones" class="p-3">
+                        <div id="mensajeVacio" class="text-center py-5">
+                            <i class="bi bi-music-note-beamed display-1 text-muted"></i>
+                            <p class="text-muted mt-3">No hay canciones en tu playlist</p>
+                            <p class="text-muted small">Agrega tu primera cancion</p>
+                        </div>
+                    </div>
+                    <div class="border-top p-3 bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">
+                                <i class="bi bi-stats me-1"></i>Estadisticas
+                            </span>
+                            <span class="fw-semibold" id="estadisticasCanciones">0 canciones</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIN BLOQUE: contenido_principal.html -->
+
+    <!-- ====================================================== -->
+    <!-- BLOQUE: footer.html                                   -->
+    <!-- Pie de pagina con informacion de copyright            -->
+    <!-- ====================================================== -->
+    <footer class="mt-5 pt-3 border-top">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <i class="bi bi-music-note-beamed text-success me-1"></i>
+                <span class="text-muted small">MiMusic © 2026</span>
+            </div>
+            <div class="text-muted small">
+                <i class="bi bi-heart-fill text-danger me-1"></i>
+                Hecho con ❤️ por [Tu nombre]
+            </div>
+        </div>
+    </footer>
+    <!-- FIN BLOQUE: footer.html -->
+
+</div>
+<!-- FIN PLANTILLA: base.html -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
