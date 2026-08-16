@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Canciones - EnoxhBeats{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <section class="seccion-card p-4 rounded-4">
+        <h2 class="titulo-seccion"><i class="bi bi-music-note-list me-2"></i>Canciones Recomendadas</h2>
+        <p>Catálogo de canciones recomendadas (datos de ejemplo, más adelante vendrán de una base de datos).</p>
+
+        <div class="row g-3">
+            <!-- Recorremos la lista "canciones" que app.py envia con render_template -->
+            {% for cancion in canciones %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ cancion.nombre }}</h5>
+                        <p class="mb-1 text-muted">{{ cancion.artista }}</p>
+                        <span class="badge-categoria mb-2 d-inline-block">{{ cancion.genero }}</span>
+                        <p class="card-text small">{{ cancion.descripcion }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

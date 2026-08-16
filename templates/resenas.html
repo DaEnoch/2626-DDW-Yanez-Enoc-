@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Reseñas - EnoxhBeats{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <section class="seccion-card p-4 rounded-4">
+        <h2 class="titulo-seccion"><i class="bi bi-chat-square-text me-2"></i>Reseñas</h2>
+        <p>Opiniones sobre canciones (datos de ejemplo).</p>
+
+        <div class="row g-3">
+            <!-- Recorremos la lista "resenas" que app.py envia con render_template -->
+            {% for resena in resenas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ resena.cancion }}</h5>
+                        <p class="mb-1 text-muted">Por {{ resena.autor }}</p>
+                        <!-- Dibujamos estrellas llenas segun la puntuacion (1 a 5) -->
+                        <div class="mb-2">
+                            {% for i in range(resena.puntuacion) %}<i class="bi bi-star-fill" style="color: var(--accent-hover);"></i>{% endfor %}
+                        </div>
+                        <p class="card-text small">{{ resena.comentario }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

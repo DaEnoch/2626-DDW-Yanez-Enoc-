@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Artistas - EnoxhBeats{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <section class="seccion-card p-4 rounded-4">
+        <h2 class="titulo-seccion"><i class="bi bi-person-badge me-2"></i>Artistas</h2>
+        <p>Artistas destacados en la plataforma (datos de ejemplo).</p>
+
+        <div class="row g-3">
+            <!-- Recorremos la lista "artistas" que app.py envia con render_template -->
+            {% for artista in artistas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ artista.nombre }}</h5>
+                        <p class="mb-1 text-muted"><i class="bi bi-geo-alt me-1"></i>{{ artista.pais }}</p>
+                        <span class="badge-categoria mb-2 d-inline-block">{{ artista.genero }}</span>
+                        <p class="card-text small">{{ artista.descripcion }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}
