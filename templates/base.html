@@ -12,49 +12,23 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- CSS propio, ahora cargado desde la carpeta static con url_for -->
+    <!-- CSS propio, cargado desde static con url_for -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<!-- NAVBAR: es igual en todas las paginas, por eso vive aqui en base.html -->
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
-            <i class="bi bi-music-note-beamed me-2"></i>
-            <span class="fw-bold">EnoxhBeats</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
-                aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menú">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="menuPrincipal">
-            <ul class="navbar-nav ms-auto">
-                <!-- Estos enlaces usan url_for para no escribir las rutas a mano -->
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#quienes">Quiénes Somos</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#servicios">Servicios</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('canciones') }}">Canciones</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('artistas') }}">Artistas</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('generos') }}">Géneros</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('resenas') }}">Reseñas</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#contacto">Contacto</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- Componente navbar, se incluye en vez de repetirlo en cada pagina -->
+{% include "components/navbar.html" %}
 
 <!-- Aqui cada pagina hija mete su propio contenido -->
 {% block content %}{% endblock %}
 
-<!-- FOOTER: tambien igual en todas las paginas -->
-<footer>
-    <p class="mb-0">Estudiante: <strong>Enoc Isaías Yanez Saltos</strong> | Asignatura: Desarrollo de Aplicaciones Web | 2026</p>
-</footer>
+<!-- Componente footer -->
+{% include "components/footer.html" %}
 
 <!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- JS propio, cargado desde la carpeta static con url_for -->
+<!-- JS propio, cargado desde static con url_for -->
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 <!-- Por si alguna pagina hija necesita agregar un script extra -->

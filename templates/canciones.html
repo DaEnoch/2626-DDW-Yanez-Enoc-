@@ -6,18 +6,32 @@
 <main class="container my-5">
     <section class="seccion-card p-4 rounded-4">
         <h2 class="titulo-seccion"><i class="bi bi-music-note-list me-2"></i>Canciones Recomendadas</h2>
-        <p>Catálogo de canciones recomendadas (datos de ejemplo, más adelante vendrán de una base de datos).</p>
+
+        <!-- variable simple enviada desde app.py -->
+        <p>Sistema: <strong>{{ nombre_sistema }}</strong></p>
+
+        <!-- diccionario del sistema enviado desde app.py -->
+        <p class="small text-muted">
+            {{ info_sistema.nombre }} - version {{ info_sistema.version }} | Total de canciones: {{ info_sistema.total_canciones }}
+        </p>
 
         <div class="row g-3">
-            <!-- Recorremos la lista "canciones" que app.py envia con render_template -->
+            <!-- recorremos la lista de canciones con for -->
             {% for cancion in canciones %}
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">{{ cancion.nombre }}</h5>
+                        <!-- filtro upper para mostrar el titulo en mayusculas -->
+                        <h5 class="card-title">{{ cancion.titulo|upper }}</h5>
                         <p class="mb-1 text-muted">{{ cancion.artista }}</p>
-                        <span class="badge-categoria mb-2 d-inline-block">{{ cancion.genero }}</span>
-                        <p class="card-text small">{{ cancion.descripcion }}</p>
+                        <p class="mb-2 small">Duracion: {{ cancion.duracion }}</p>
+
+                        <!-- condicional para mostrar disponibilidad -->
+                        {% if cancion.disponible %}
+                            <span class="badge bg-success">Disponible</span>
+                        {% else %}
+                            <span class="badge bg-danger">No disponible</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
