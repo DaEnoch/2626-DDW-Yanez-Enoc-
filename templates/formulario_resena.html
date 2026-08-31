@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Resena - EnoxhBeats{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <section class="seccion-card p-4 rounded-4">
+        <h2 class="titulo-seccion"><i class="bi bi-chat-square-text me-2"></i>Registrar Resena</h2>
+
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.cancion.label(class="form-label") }}
+                {{ form.cancion(class="form-control" + (" is-invalid" if form.cancion.errors else "")) }}
+                {% for error in form.cancion.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.autor.label(class="form-label") }}
+                {{ form.autor(class="form-control" + (" is-invalid" if form.autor.errors else "")) }}
+                {% for error in form.autor.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.comentario.label(class="form-label") }}
+                {{ form.comentario(class="form-control" + (" is-invalid" if form.comentario.errors else ""), rows="3") }}
+                {% for error in form.comentario.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.puntuacion.label(class="form-label") }}
+                {{ form.puntuacion(class="form-control" + (" is-invalid" if form.puntuacion.errors else "")) }}
+                {% for error in form.puntuacion.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('resenas') }}" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </section>
+</main>
+{% endblock %}
