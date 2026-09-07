@@ -5,7 +5,12 @@
 {% block content %}
 <main class="container my-5">
     <section class="seccion-card p-4 rounded-4">
-        <h2 class="titulo-seccion"><i class="bi bi-music-note-list me-2"></i>Canciones Recomendadas</h2>
+               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <h2 class="titulo-seccion mb-0"><i class="bi bi-music-note-list me-2"></i>Canciones Recomendadas</h2>
+            <a href="{{ url_for('nueva_cancion') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>Agregar cancion
+            </a>
+        </div>
 
         <!-- variable simple enviada desde app.py -->
         <p>Sistema: <strong>{{ nombre_sistema }}</strong></p>

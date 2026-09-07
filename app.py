@@ -1,56 +1,94 @@
 # app.py
-from flask import Flask, render_template
+import os
+import sqlite3
+
+from flask import Flask, render_template, redirect, url_for
+
+from forms.artista_form import ArtistaForm
+from forms.cancion_form import CancionForm
+from forms.genero_form import GeneroForm
+from forms.resena_form import ResenaForm
 
 # Creamos la aplicacion Flask
 app = Flask(__name__)
 
-# ============================================================
-# DATOS DE EJEMPLO (todavia sin base de datos)
-# ============================================================
+# secret key necesaria para el token CSRF de flask-wtf
+app.config['SECRET_KEY'] = 'clave-secreta-enoxhbeats-2026'
 
 # variable simple para el modulo canciones
 nombre_sistema = "EnoxhBeats"
 
-# diccionario para info general del sistema
-info_sistema = {
-    "nombre": "EnoxhBeats",
-    "version": "1.0",
-    "total_canciones": 4
-}
 
-# lista de diccionarios del modulo canciones
-canciones_demo = [
-    {"titulo": "Imagination", "artista": "Foster the People", "duracion": "3:45", "disponible": True},
-    {"titulo": "Blinding Lights", "artista": "The Weeknd", "duracion": "3:20", "disponible": True},
-    {"titulo": "Take Five", "artista": "Dave Brubeck", "duracion": "5:24", "disponible": False},
-    {"titulo": "Clair de Lune", "artista": "Claude Debussy", "duracion": "4:30", "disponible": True},
-]
+# ============================================================
+# BASE DE DATOS (Semana 12)
+# ============================================================
 
-# Modulo "Artistas"
-artistas_demo = [
-    {"nombre": "Foster the People", "pais": "Estados Unidos", "genero": "Indie Pop", "descripcion": "Banda conocida por mezclar synth-pop con letras introspectivas."},
-    {"nombre": "The Weeknd", "pais": "Canada", "genero": "Pop / R&B", "descripcion": "Uno de los artistas mas escuchados de la ultima decada."},
-    {"nombre": "Bad Bunny", "pais": "Puerto Rico", "genero": "Reggaeton", "descripcion": "Referente del genero urbano latino a nivel mundial."},
-]
+DB_PATH = os.path.join('data', 'musica.db')
 
-# Modulo "Generos"
-generos_demo = [
-    {"nombre": "Pop", "descripcion": "Musica popular con estructuras simples y pegajosas."},
-    {"nombre": "Rock Alternativo", "descripcion": "Variante del rock con sonidos mas experimentales."},
-    {"nombre": "Reggaeton", "descripcion": "Ritmo urbano latino con base de dembow."},
-    {"nombre": "Electronica", "descripcion": "Musica creada principalmente con sintetizadores."},
-]
 
-# Modulo "Resenas"
-resenas_demo = [
-    {"cancion": "Imagination", "autor": "Enoc Y.", "comentario": "Perfecta para relajarse en las mananas.", "puntuacion": 5},
-    {"cancion": "Blinding Lights", "autor": "Enoc Y.", "comentario": "Un clasico moderno, nunca cansa.", "puntuacion": 5},
-    {"cancion": "Take Five", "autor": "Enoc Y.", "comentario": "Ideal para quienes recien descubren el jazz.", "puntuacion": 4},
-]
+def get_connection():
+    # abre la conexion a la base de datos
+    conn = sqlite3.connect(DB_PATH)
+    # permite acceder a las columnas por nombre en vez de por indice
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    # crea la carpeta data si no existe
+    os.makedirs('data', exist_ok=True)
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS canciones (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            titulo TEXT NOT NULL,
+            artista TEXT NOT NULL,
+            duracion TEXT,
+            disponible INTEGER NOT NULL DEFAULT 1
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS artistas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            pais TEXT,
+            genero TEXT,
+            descripcion TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS generos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            descripcion TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS resenas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cancion TEXT NOT NULL,
+            autor TEXT,
+            comentario TEXT,
+            puntuacion INTEGER
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+
+# crea la carpeta data y las tablas apenas arranca la app
+init_db()
 
 
 # ============================================================
-# RUTAS
+# RUTAS DE VISUALIZACION
 # ============================================================
 
 @app.route('/')
@@ -58,12 +96,24 @@ def index():
     return render_template('index.html')
 
 
-# Ruta de canciones, envia variable simple, diccionario y lista
+# Ruta de canciones, ahora lee desde SQLite en vez de la lista demo
 @app.route('/canciones')
 def canciones():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM canciones')
+    canciones_bd = cursor.fetchall()
+    conn.close()
+
+    info_sistema = {
+        "nombre": nombre_sistema,
+        "version": "1.0",
+        "total_canciones": len(canciones_bd)
+    }
+
     return render_template(
         'canciones.html',
-        canciones=canciones_demo,
+        canciones=canciones_bd,
         nombre_sistema=nombre_sistema,
         info_sistema=info_sistema
     )
@@ -71,17 +121,113 @@ def canciones():
 
 @app.route('/artistas')
 def artistas():
-    return render_template('artistas.html', artistas=artistas_demo)
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM artistas')
+    artistas_bd = cursor.fetchall()
+    conn.close()
+    return render_template('artistas.html', artistas=artistas_bd)
 
 
 @app.route('/generos')
 def generos():
-    return render_template('generos.html', generos=generos_demo)
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM generos')
+    generos_bd = cursor.fetchall()
+    conn.close()
+    return render_template('generos.html', generos=generos_bd)
 
 
 @app.route('/resenas')
 def resenas():
-    return render_template('resenas.html', resenas=resenas_demo)
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM resenas')
+    resenas_bd = cursor.fetchall()
+    conn.close()
+    return render_template('resenas.html', resenas=resenas_bd)
+
+
+# ============================================================
+# RUTAS DE FORMULARIOS (GET muestra el form, POST procesa)
+# ============================================================
+
+@app.route('/artistas/nuevo', methods=['GET', 'POST'])
+def nuevo_artista():
+    form = ArtistaForm()
+
+    if form.validate_on_submit():
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO artistas (nombre, pais, genero, descripcion) VALUES (?, ?, ?, ?)',
+            (form.nombre.data, form.pais.data, form.genero.data, form.descripcion.data)
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('artistas'))
+
+    return render_template('formulario_artista.html', form=form)
+
+
+@app.route('/canciones/nuevo', methods=['GET', 'POST'])
+def nueva_cancion():
+    form = CancionForm()
+
+    if form.validate_on_submit():
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO canciones (titulo, artista, duracion, disponible) VALUES (?, ?, ?, ?)',
+            (
+                form.titulo.data,
+                form.artista.data,
+                form.duracion.data,
+                1 if form.disponible.data else 0
+            )
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('canciones'))
+
+    return render_template('formulario_cancion.html', form=form)
+
+
+@app.route('/generos/nuevo', methods=['GET', 'POST'])
+def nuevo_genero():
+    form = GeneroForm()
+
+    if form.validate_on_submit():
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO generos (nombre, descripcion) VALUES (?, ?)',
+            (form.nombre.data, form.descripcion.data)
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('generos'))
+
+    return render_template('formulario_genero.html', form=form)
+
+
+@app.route('/resenas/nuevo', methods=['GET', 'POST'])
+def nueva_resena():
+    form = ResenaForm()
+
+    if form.validate_on_submit():
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            'INSERT INTO resenas (cancion, autor, comentario, puntuacion) VALUES (?, ?, ?, ?)',
+            (form.cancion.data, form.autor.data, form.comentario.data, form.puntuacion.data)
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for('resenas'))
+
+    return render_template('formulario_resena.html', form=form)
 
 
 if __name__ == '__main__':
