@@ -5,7 +5,7 @@
 {% block content %}
 <main class="container my-5">
     <section class="seccion-card p-4 rounded-4">
-               <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
             <h2 class="titulo-seccion mb-0"><i class="bi bi-music-note-list me-2"></i>Canciones Recomendadas</h2>
             <a href="{{ url_for('nueva_cancion') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle me-1"></i>Agregar cancion
@@ -21,25 +21,38 @@
         </p>
 
         <div class="row g-3">
-            <!-- recorremos la lista de canciones con for -->
+            <!-- recorremos la lista de canciones con for, ya viene con el nombre del artista via JOIN -->
             {% for cancion in canciones %}
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100">
                     <div class="card-body">
                         <!-- filtro upper para mostrar el titulo en mayusculas -->
                         <h5 class="card-title">{{ cancion.titulo|upper }}</h5>
-                        <p class="mb-1 text-muted">{{ cancion.artista }}</p>
+                        <p class="mb-1 text-muted">{{ cancion.artista_nombre or "Sin artista asignado" }}</p>
                         <p class="mb-2 small">Duracion: {{ cancion.duracion }}</p>
 
                         <!-- condicional para mostrar disponibilidad -->
                         {% if cancion.disponible %}
-                            <span class="badge bg-success">Disponible</span>
+                            <span class="badge bg-success mb-2">Disponible</span>
                         {% else %}
-                            <span class="badge bg-danger">No disponible</span>
+                            <span class="badge bg-danger mb-2">No disponible</span>
                         {% endif %}
+
+                        <div class="d-flex gap-2 mt-2">
+                            <a href="{{ url_for('editar_cancion', id=cancion.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <form method="POST" action="{{ url_for('eliminar_cancion', id=cancion.id) }}" onsubmit="return confirm('Seguro que quieres eliminar esta cancion?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% else %}
+            <p class="text-muted">Todavia no hay canciones registradas.</p>
             {% endfor %}
         </div>
     </section>

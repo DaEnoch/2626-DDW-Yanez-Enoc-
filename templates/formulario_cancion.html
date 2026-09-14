@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Nueva Cancion - EnoxhBeats{% endblock %}
+{% block title %}{{ 'Editar Cancion' if editar else 'Nueva Cancion' }} - EnoxhBeats{% endblock %}
 
 {% block content %}
 <main class="container my-5">
     <section class="seccion-card p-4 rounded-4">
-        <h2 class="titulo-seccion"><i class="bi bi-music-note-plus me-2"></i>Registrar Cancion</h2>
+        <h2 class="titulo-seccion">
+            <i class="bi bi-music-note-plus me-2"></i>{{ 'Editar Cancion' if editar else 'Registrar Cancion' }}
+        </h2>
 
         <form method="POST" novalidate>
             {{ form.hidden_tag() }}
@@ -19,9 +21,9 @@
             </div>
 
             <div class="mb-3">
-                {{ form.artista.label(class="form-label") }}
-                {{ form.artista(class="form-control" + (" is-invalid" if form.artista.errors else "")) }}
-                {% for error in form.artista.errors %}
+                {{ form.id_artista.label(class="form-label") }}
+                {{ form.id_artista(class="form-select" + (" is-invalid" if form.id_artista.errors else "")) }}
+                {% for error in form.id_artista.errors %}
                     <div class="invalid-feedback">{{ error }}</div>
                 {% endfor %}
             </div>
