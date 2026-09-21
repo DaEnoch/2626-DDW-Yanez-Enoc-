@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EnoxhBeats{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <section class="seccion-card p-4 rounded-4">
+        <h2 class="titulo-seccion"><i class="bi bi-speedometer2 me-2"></i>Panel de Administracion</h2>
+        <p>Bienvenido, <strong>{{ current_user.usuario }}</strong>.</p>
+        <p>Desde aqui puedes gestionar el contenido de la plataforma.</p>
+
+        <div class="row g-3 mt-2">
+            <div class="col-md-3">
+                <a href="{{ url_for('artistas') }}" class="btn btn-outline-primary w-100">Artistas</a>
+            </div>
+            <div class="col-md-3">
+                <a href="{{ url_for('canciones') }}" class="btn btn-outline-primary w-100">Canciones</a>
+            </div>
+            <div class="col-md-3">
+                <a href="{{ url_for('generos') }}" class="btn btn-outline-primary w-100">Géneros</a>
+            </div>
+            <div class="col-md-3">
+                <a href="{{ url_for('resenas') }}" class="btn btn-outline-primary w-100">Reseñas</a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesion - EnoxhBeats{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+    <section class="seccion-card p-4 rounded-4" style="max-width: 480px; margin: 0 auto;">
+        <h2 class="titulo-seccion"><i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesion</h2>
+
+        {% with mensajes = get_flashed_messages() %}
+            {% if mensajes %}
+                {% for mensaje in mensajes %}
+                    <div class="alert alert-warning">{{ mensaje }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.usuario.label(class="form-label") }}
+                {{ form.usuario(class="form-control" + (" is-invalid" if form.usuario.errors else "")) }}
+                {% for error in form.usuario.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                {% for error in form.password.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+
+        <p class="mt-3 text-center">
+            No tienes cuenta? <a href="{{ url_for('registro') }}">Registrate aqui</a>
+        </p>
+    </section>
+</main>
+{% endblock %}
