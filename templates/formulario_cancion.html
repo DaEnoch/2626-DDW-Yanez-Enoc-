@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ 'Editar Cancion' if editar else 'Nueva Cancion' }} - EnoxhBeats{% endblock %}
+{% block title %}{{ 'Editar Canción' if editar else 'Nueva Canción' }} - EnoxhBeats{% endblock %}
 
 {% block content %}
 <main class="container my-5">
     <section class="seccion-card p-4 rounded-4">
         <h2 class="titulo-seccion">
-            <i class="bi bi-music-note-plus me-2"></i>{{ 'Editar Cancion' if editar else 'Registrar Cancion' }}
+            <i class="bi bi-music-note-plus me-2"></i>{{ 'Editar Canción' if editar else 'Registrar Canción' }}
         </h2>
 
         <form method="POST" novalidate>

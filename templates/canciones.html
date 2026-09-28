@@ -7,53 +7,72 @@
     <section class="seccion-card p-4 rounded-4">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
             <h2 class="titulo-seccion mb-0"><i class="bi bi-music-note-list me-2"></i>Canciones Recomendadas</h2>
+            {% if current_user.is_authenticated %}
             <a href="{{ url_for('nueva_cancion') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i>Agregar cancion
+                <i class="bi bi-plus-circle me-1"></i>Agregar canción
             </a>
+            {% endif %}
         </div>
+
+        {% include "components/mensajes.html" %}
 
         <!-- variable simple enviada desde app.py -->
         <p>Sistema: <strong>{{ nombre_sistema }}</strong></p>
 
         <!-- diccionario del sistema enviado desde app.py -->
         <p class="small text-muted">
-            {{ info_sistema.nombre }} - version {{ info_sistema.version }} | Total de canciones: {{ info_sistema.total_canciones }}
+            {{ info_sistema.nombre }} - versión {{ info_sistema.version }} | Total de canciones: {{ info_sistema.total_canciones }}
         </p>
 
-        <div class="row g-3">
-            <!-- recorremos la lista de canciones con for, ya viene con el nombre del artista via JOIN -->
-            {% for cancion in canciones %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <!-- filtro upper para mostrar el titulo en mayusculas -->
-                        <h5 class="card-title">{{ cancion.titulo|upper }}</h5>
-                        <p class="mb-1 text-muted">{{ cancion.artista_nombre or "Sin artista asignado" }}</p>
-                        <p class="mb-2 small">Duracion: {{ cancion.duracion }}</p>
-
-                        <!-- condicional para mostrar disponibilidad -->
-                        {% if cancion.disponible %}
-                            <span class="badge bg-success mb-2">Disponible</span>
-                        {% else %}
-                            <span class="badge bg-danger mb-2">No disponible</span>
-                        {% endif %}
-
-                        <div class="d-flex gap-2 mt-2">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Título</th>
+                        <th>Artista</th>
+                        <th>Duración</th>
+                        <th>Estado</th>
+                        {% if current_user.is_authenticated %}<th>Acciones</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- recorremos los registros que vienen de PostgreSQL (JOIN con artistas) -->
+                    {% for cancion in canciones %}
+                    <tr>
+                        <td>{{ cancion.id }}</td>
+                        <!-- filtro upper para mostrar el título en mayúsculas -->
+                        <td>{{ cancion.titulo|upper }}</td>
+                        <td>{{ cancion.artista_nombre }}</td>
+                        <td>{{ cancion.duracion }}</td>
+                        <td>
+                            {% if cancion.disponible %}
+                                <span class="badge bg-success">Disponible</span>
+                            {% else %}
+                                <span class="badge bg-danger">No disponible</span>
+                            {% endif %}
+                        </td>
+                        {% if current_user.is_authenticated %}
+                        <td class="text-nowrap">
                             <a href="{{ url_for('editar_cancion', id=cancion.id) }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
-                            <form method="POST" action="{{ url_for('eliminar_cancion', id=cancion.id) }}" onsubmit="return confirm('Seguro que quieres eliminar esta cancion?');">
+                            <form method="POST" action="{{ url_for('eliminar_cancion', id=cancion.id) }}" class="d-inline"
+                                  onsubmit="return confirm('¿Seguro que quieres eliminar esta canción?');">
                                 <button type="submit" class="btn btn-sm btn-outline-danger">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </button>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <p class="text-muted">Todavia no hay canciones registradas.</p>
-            {% endfor %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="{{ 6 if current_user.is_authenticated else 5 }}" class="text-center text-muted">Todavía no hay canciones registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 </main>

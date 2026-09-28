@@ -5,28 +5,60 @@
 {% block content %}
 <main class="container my-5">
     <section class="seccion-card p-4 rounded-4">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
             <h2 class="titulo-seccion mb-0"><i class="bi bi-person-badge me-2"></i>Artistas</h2>
+            {% if current_user.is_authenticated %}
             <a href="{{ url_for('nuevo_artista') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle me-1"></i>Agregar artista
             </a>
+            {% endif %}
         </div>
         <p>Artistas registrados en la base de datos.</p>
-        
-        <div class="row g-3">
-            <!-- Recorremos la lista "artistas" que app.py envia con render_template -->
-            {% for artista in artistas %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ artista.nombre }}</h5>
-                        <p class="mb-1 text-muted"><i class="bi bi-geo-alt me-1"></i>{{ artista.pais }}</p>
-                        <span class="badge-categoria mb-2 d-inline-block">{{ artista.genero }}</span>
-                        <p class="card-text small">{{ artista.descripcion }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+
+        {% include "components/mensajes.html" %}
+
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>País</th>
+                        <th>Género</th>
+                        <th>Descripción</th>
+                        {% if current_user.is_authenticated %}<th>Acciones</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- recorremos la lista "artistas" que app.py envía desde PostgreSQL -->
+                    {% for artista in artistas %}
+                    <tr>
+                        <td>{{ artista.id }}</td>
+                        <td>{{ artista.nombre }}</td>
+                        <td>{{ artista.pais }}</td>
+                        <td><span class="badge-categoria">{{ artista.genero }}</span></td>
+                        <td class="small">{{ artista.descripcion }}</td>
+                        {% if current_user.is_authenticated %}
+                        <td class="text-nowrap">
+                            <a href="{{ url_for('editar_artista', id=artista.id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                            <form method="POST" action="{{ url_for('eliminar_artista', id=artista.id) }}" class="d-inline"
+                                  onsubmit="return confirm('¿Seguro que quieres eliminar este artista?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </form>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="{{ 6 if current_user.is_authenticated else 5 }}" class="text-center text-muted">Todavía no hay artistas registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 </main>

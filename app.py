@@ -1,9 +1,12 @@
 # app.py
-from flask import Flask, render_template, redirect, url_for, flash
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
-from conexion.conexion import get_connection
+from flask import Flask, render_template, redirect, url_for, flash
+from flask_login import LoginManager, login_user, logout_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
+from psycopg2 import errors
+
+from conexion.conexion import get_connection, get_cursor, inicializar_bd
 from models import Usuario
 
 from forms.artista_form import ArtistaForm
@@ -15,41 +18,74 @@ from forms.usuario_form import UsuarioForm
 
 app = Flask(__name__)
 
-# secret key necesaria para el token CSRF y para el manejo de sesiones
-app.config['SECRET_KEY'] = 'clave-secreta-enoxhbeats-2026'
+# en Render la clave viene de la variable SECRET_KEY, en local usa la de abajo
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'clave-secreta-enoxhbeats-2026')
 
 nombre_sistema = "EnoxhBeats"
+
+# crea las tablas si todavia no existen
+inicializar_bd()
 
 # configuracion de flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-login_manager.login_message = 'Debes iniciar sesion para acceder a esta pagina.'
+login_manager.login_message = 'Debes iniciar sesión para acceder a esta página.'
+
+
+# ============================================================
+# FUNCIONES AUXILIARES PARA POSTGRESQL
+# ============================================================
+
+def consultar(sql, params=(), uno=False):
+    # ejecuta un SELECT parametrizado, devuelve un registro o todos
+    conn = get_connection()
+    try:
+        cursor = get_cursor(conn)
+        cursor.execute(sql, params)
+        resultado = cursor.fetchone() if uno else cursor.fetchall()
+        cursor.close()
+    finally:
+        conn.close()
+    return resultado
+
+
+def ejecutar(sql, params=()):
+    # ejecuta INSERT, UPDATE o DELETE parametrizado y guarda con commit
+    conn = get_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql, params)
+        conn.commit()
+        cursor.close()
+    finally:
+        conn.close()
+
+
+def opciones_artistas():
+    # opciones del select de artistas
+    filas = consultar('SELECT id, nombre FROM artistas ORDER BY nombre')
+    return [(f['id'], f['nombre']) for f in filas]
+
+
+def opciones_canciones():
+    # opciones del select de canciones, con el artista para distinguirlas
+    filas = consultar('''
+        SELECT c.id, c.titulo, a.nombre AS artista
+        FROM canciones c
+        JOIN artistas a ON c.id_artista = a.id
+        ORDER BY c.titulo
+    ''')
+    return [(f['id'], f"{f['titulo']} - {f['artista']}") for f in filas]
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    # recupera el usuario desde la base de datos usando su id
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM usuarios WHERE id = %s', (user_id,))
-    usuario = cursor.fetchone()
-    cursor.close()
-    conn.close()
-
+    # recupera el usuario desde la base de datos con su id
+    usuario = consultar('SELECT * FROM usuarios WHERE id = %s', (int(user_id),), uno=True)
     if usuario:
         return Usuario(usuario['id'], usuario['usuario'], usuario['password'])
     return None
-
-
-def obtener_choices_artistas():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT id, nombre FROM artistas ORDER BY nombre')
-    artistas_bd = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return [(a['id'], a['nombre']) for a in artistas_bd]
 
 
 # ============================================================
@@ -61,20 +97,20 @@ def registro():
     form = UsuarioForm()
 
     if form.validate_on_submit():
-        # nunca guardar la contrasena en texto plano
+        # nunca guardar la contraseña en texto plano
         password_hash = generate_password_hash(form.password.data)
 
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            'INSERT INTO usuarios (usuario, password) VALUES (%s, %s)',
-            (form.usuario.data, password_hash)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        try:
+            ejecutar(
+                'INSERT INTO usuarios (usuario, password) VALUES (%s, %s)',
+                (form.usuario.data, password_hash)
+            )
+        except errors.UniqueViolation:
+            # el usuario ya existe (campo UNIQUE)
+            form.usuario.errors.append('Ese usuario ya existe.')
+            return render_template('registro.html', form=form)
 
-        flash('Usuario registrado correctamente, ya puedes iniciar sesion.')
+        flash('Usuario registrado correctamente, ya puedes iniciar sesión.')
         return redirect(url_for('login'))
 
     return render_template('registro.html', form=form)
@@ -85,20 +121,19 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM usuarios WHERE usuario = %s', (form.usuario.data,))
-        usuario_bd = cursor.fetchone()
-        cursor.close()
-        conn.close()
+        usuario_bd = consultar(
+            'SELECT * FROM usuarios WHERE usuario = %s',
+            (form.usuario.data,),
+            uno=True
+        )
 
-        # nunca comparar la contrasena escrita directamente contra la guardada
+        # nunca comparar la contraseña escrita directo con la guardada
         if usuario_bd and check_password_hash(usuario_bd['password'], form.password.data):
             usuario = Usuario(usuario_bd['id'], usuario_bd['usuario'], usuario_bd['password'])
             login_user(usuario)
             return redirect(url_for('dashboard'))
 
-        flash('Usuario o contrasena incorrectos.')
+        flash('Usuario o contraseña incorrectos.')
 
     return render_template('login.html', form=form)
 
@@ -117,7 +152,7 @@ def dashboard():
 
 
 # ============================================================
-# RUTAS DE VISUALIZACION (publicas)
+# LISTADOS (publicos)
 # ============================================================
 
 @app.route('/')
@@ -125,19 +160,15 @@ def index():
     return render_template('index.html')
 
 
+# JOIN canciones + artistas
 @app.route('/canciones')
 def canciones():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('''
+    canciones_bd = consultar('''
         SELECT c.id, c.titulo, c.duracion, c.disponible, a.nombre AS artista_nombre
         FROM canciones c
-        LEFT JOIN artistas a ON c.id_artista = a.id
+        JOIN artistas a ON c.id_artista = a.id
         ORDER BY c.id DESC
     ''')
-    canciones_bd = cursor.fetchall()
-    cursor.close()
-    conn.close()
 
     info_sistema = {
         "nombre": nombre_sistema,
@@ -155,39 +186,32 @@ def canciones():
 
 @app.route('/artistas')
 def artistas():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM artistas')
-    artistas_bd = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    artistas_bd = consultar('SELECT * FROM artistas ORDER BY id DESC')
     return render_template('artistas.html', artistas=artistas_bd)
 
 
 @app.route('/generos')
 def generos():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM generos')
-    generos_bd = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    generos_bd = consultar('SELECT * FROM generos ORDER BY id DESC')
     return render_template('generos.html', generos=generos_bd)
 
 
+# JOIN resenas + canciones + artistas (las tres tablas relacionadas)
 @app.route('/resenas')
 def resenas():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM resenas')
-    resenas_bd = cursor.fetchall()
-    cursor.close()
-    conn.close()
+    resenas_bd = consultar('''
+        SELECT r.id, r.autor, r.comentario, r.puntuacion,
+               c.titulo AS cancion_titulo, a.nombre AS artista_nombre
+        FROM resenas r
+        JOIN canciones c ON r.id_cancion = c.id
+        JOIN artistas a ON c.id_artista = a.id
+        ORDER BY r.id DESC
+    ''')
     return render_template('resenas.html', resenas=resenas_bd)
 
 
 # ============================================================
-# RUTAS ADMINISTRATIVAS (protegidas con login_required)
+# ARTISTAS: crear, editar, eliminar (protegidas)
 # ============================================================
 
 @app.route('/artistas/nuevo', methods=['GET', 'POST'])
@@ -196,41 +220,64 @@ def nuevo_artista():
     form = ArtistaForm()
 
     if form.validate_on_submit():
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
+        ejecutar(
             'INSERT INTO artistas (nombre, pais, genero, descripcion) VALUES (%s, %s, %s, %s)',
             (form.nombre.data, form.pais.data, form.genero.data, form.descripcion.data)
         )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        flash('Artista registrado correctamente.', 'success')
         return redirect(url_for('artistas'))
 
-    return render_template('formulario_artista.html', form=form)
+    return render_template('formulario_artista.html', form=form, editar=False)
 
+
+@app.route('/artistas/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_artista(id):
+    artista = consultar('SELECT * FROM artistas WHERE id = %s', (id,), uno=True)
+    if artista is None:
+        return redirect(url_for('artistas'))
+
+    # en GET carga los datos actuales, en POST usa lo enviado
+    form = ArtistaForm(data=artista)
+
+    if form.validate_on_submit():
+        ejecutar(
+            'UPDATE artistas SET nombre = %s, pais = %s, genero = %s, descripcion = %s WHERE id = %s',
+            (form.nombre.data, form.pais.data, form.genero.data, form.descripcion.data, id)
+        )
+        flash('Artista actualizado correctamente.', 'success')
+        return redirect(url_for('artistas'))
+
+    return render_template('formulario_artista.html', form=form, editar=True)
+
+
+@app.route('/artistas/eliminar/<int:id>', methods=['POST'])
+@login_required
+def eliminar_artista(id):
+    try:
+        ejecutar('DELETE FROM artistas WHERE id = %s', (id,))
+        flash('Artista eliminado correctamente.', 'success')
+    except errors.ForeignKeyViolation:
+        flash('No se puede eliminar el artista porque tiene canciones asociadas.', 'danger')
+    return redirect(url_for('artistas'))
+
+
+# ============================================================
+# CANCIONES: crear, editar, eliminar (protegidas)
+# ============================================================
 
 @app.route('/canciones/nuevo', methods=['GET', 'POST'])
 @login_required
 def nueva_cancion():
     form = CancionForm()
-    form.id_artista.choices = obtener_choices_artistas()
+    form.id_artista.choices = opciones_artistas()
 
     if form.validate_on_submit():
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
+        ejecutar(
             'INSERT INTO canciones (titulo, id_artista, duracion, disponible) VALUES (%s, %s, %s, %s)',
-            (
-                form.titulo.data,
-                form.id_artista.data,
-                form.duracion.data,
-                1 if form.disponible.data else 0
-            )
+            (form.titulo.data, form.id_artista.data, form.duracion.data, form.disponible.data)
         )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        flash('Canción registrada correctamente.', 'success')
         return redirect(url_for('canciones'))
 
     return render_template('formulario_cancion.html', form=form, editar=False)
@@ -239,42 +286,20 @@ def nueva_cancion():
 @app.route('/canciones/editar/<int:id>', methods=['GET', 'POST'])
 @login_required
 def editar_cancion(id):
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM canciones WHERE id = %s', (id,))
-    cancion = cursor.fetchone()
-    cursor.close()
-    conn.close()
-
+    cancion = consultar('SELECT * FROM canciones WHERE id = %s', (id,), uno=True)
     if cancion is None:
         return redirect(url_for('canciones'))
 
-    form = CancionForm()
-    form.id_artista.choices = obtener_choices_artistas()
+    form = CancionForm(data=cancion)
+    form.id_artista.choices = opciones_artistas()
 
     if form.validate_on_submit():
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
+        ejecutar(
             'UPDATE canciones SET titulo = %s, id_artista = %s, duracion = %s, disponible = %s WHERE id = %s',
-            (
-                form.titulo.data,
-                form.id_artista.data,
-                form.duracion.data,
-                1 if form.disponible.data else 0,
-                id
-            )
+            (form.titulo.data, form.id_artista.data, form.duracion.data, form.disponible.data, id)
         )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        flash('Canción actualizada correctamente.', 'success')
         return redirect(url_for('canciones'))
-
-    if not form.is_submitted():
-        form.titulo.data = cancion['titulo']
-        form.id_artista.data = cancion['id_artista']
-        form.duracion.data = cancion['duracion']
-        form.disponible.data = bool(cancion['disponible'])
 
     return render_template('formulario_cancion.html', form=form, editar=True)
 
@@ -282,14 +307,17 @@ def editar_cancion(id):
 @app.route('/canciones/eliminar/<int:id>', methods=['POST'])
 @login_required
 def eliminar_cancion(id):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('DELETE FROM canciones WHERE id = %s', (id,))
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        ejecutar('DELETE FROM canciones WHERE id = %s', (id,))
+        flash('Canción eliminada correctamente.', 'success')
+    except errors.ForeignKeyViolation:
+        flash('No se puede eliminar la canción porque tiene reseñas asociadas.', 'danger')
     return redirect(url_for('canciones'))
 
+
+# ============================================================
+# GENEROS: crear, editar, eliminar (protegidas)
+# ============================================================
 
 @app.route('/generos/nuevo', methods=['GET', 'POST'])
 @login_required
@@ -297,38 +325,92 @@ def nuevo_genero():
     form = GeneroForm()
 
     if form.validate_on_submit():
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
+        ejecutar(
             'INSERT INTO generos (nombre, descripcion) VALUES (%s, %s)',
             (form.nombre.data, form.descripcion.data)
         )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        flash('Género registrado correctamente.', 'success')
         return redirect(url_for('generos'))
 
-    return render_template('formulario_genero.html', form=form)
+    return render_template('formulario_genero.html', form=form, editar=False)
 
+
+@app.route('/generos/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_genero(id):
+    genero = consultar('SELECT * FROM generos WHERE id = %s', (id,), uno=True)
+    if genero is None:
+        return redirect(url_for('generos'))
+
+    form = GeneroForm(data=genero)
+
+    if form.validate_on_submit():
+        ejecutar(
+            'UPDATE generos SET nombre = %s, descripcion = %s WHERE id = %s',
+            (form.nombre.data, form.descripcion.data, id)
+        )
+        flash('Género actualizado correctamente.', 'success')
+        return redirect(url_for('generos'))
+
+    return render_template('formulario_genero.html', form=form, editar=True)
+
+
+@app.route('/generos/eliminar/<int:id>', methods=['POST'])
+@login_required
+def eliminar_genero(id):
+    ejecutar('DELETE FROM generos WHERE id = %s', (id,))
+    flash('Género eliminado correctamente.', 'success')
+    return redirect(url_for('generos'))
+
+
+# ============================================================
+# RESENAS: crear, editar, eliminar (protegidas)
+# ============================================================
 
 @app.route('/resenas/nuevo', methods=['GET', 'POST'])
 @login_required
 def nueva_resena():
     form = ResenaForm()
+    form.id_cancion.choices = opciones_canciones()
 
     if form.validate_on_submit():
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            'INSERT INTO resenas (cancion, autor, comentario, puntuacion) VALUES (%s, %s, %s, %s)',
-            (form.cancion.data, form.autor.data, form.comentario.data, form.puntuacion.data)
+        ejecutar(
+            'INSERT INTO resenas (id_cancion, autor, comentario, puntuacion) VALUES (%s, %s, %s, %s)',
+            (form.id_cancion.data, form.autor.data, form.comentario.data, form.puntuacion.data)
         )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        flash('Reseña registrada correctamente.', 'success')
         return redirect(url_for('resenas'))
 
-    return render_template('formulario_resena.html', form=form)
+    return render_template('formulario_resena.html', form=form, editar=False)
+
+
+@app.route('/resenas/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_resena(id):
+    resena = consultar('SELECT * FROM resenas WHERE id = %s', (id,), uno=True)
+    if resena is None:
+        return redirect(url_for('resenas'))
+
+    form = ResenaForm(data=resena)
+    form.id_cancion.choices = opciones_canciones()
+
+    if form.validate_on_submit():
+        ejecutar(
+            'UPDATE resenas SET id_cancion = %s, autor = %s, comentario = %s, puntuacion = %s WHERE id = %s',
+            (form.id_cancion.data, form.autor.data, form.comentario.data, form.puntuacion.data, id)
+        )
+        flash('Reseña actualizada correctamente.', 'success')
+        return redirect(url_for('resenas'))
+
+    return render_template('formulario_resena.html', form=form, editar=True)
+
+
+@app.route('/resenas/eliminar/<int:id>', methods=['POST'])
+@login_required
+def eliminar_resena(id):
+    ejecutar('DELETE FROM resenas WHERE id = %s', (id,))
+    flash('Reseña eliminada correctamente.', 'success')
+    return redirect(url_for('resenas'))
 
 
 if __name__ == '__main__':

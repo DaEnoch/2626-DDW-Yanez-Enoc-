@@ -21,9 +21,9 @@
                 <!-- estado de sesion: muestra usuario y logout si esta autenticado, sino login/registro -->
                 {% if current_user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}"><i class="bi bi-speedometer2 me-1"></i>{{ current_user.usuario }}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right me-1"></i>Cerrar sesion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión</a></li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('registro') }}">Registrarse</a></li>
                 {% endif %}
             </ul>
